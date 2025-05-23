@@ -342,15 +342,6 @@ class HomeController extends Controller
         }
     }
 
-
-
-
-
-
-
-
-    
-
     public function submitEvaluationDirector(Request $request, $emp_id)
     {
         $request->validate([

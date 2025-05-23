@@ -25,39 +25,39 @@
             <tbody>
                 @foreach($reviews as $review)
                     <tr>
-                        <td>Has the employee demonstrated regular attendance and punctuality?</td>
+                        <td>1. Has the employee demonstrated regular attendance and punctuality?</td>
                         <td>{{ $review->demonstrated_attendance }} / {{ $review->comments_demonstrated_attendance }}</td>
                     </tr>
                     <tr>
-                        <td>How well does the employee manage time within the shift?</td>
+                        <td>2. How well does the employee manage time within the shift?</td>
                         <td>{{ $review->employee_manage_shift }} / {{ $review->comments_employee_manage_shift }}</td>
                     </tr>
                     <tr>
-                        <td>How would you rate the employee’s accuracy and neatness in reports and documentation?</td>
+                        <td>3. How would you rate the employee’s accuracy and neatness in reports and documentation?</td>
                         <td>{{ $review->documentation_neatness }} / {{ $review->comments_documentation_neatness }}</td>
                     </tr>
                     <tr>
-                        <td>Has the employee followed administrative procedures and job instructions properly?</td>
+                        <td>4. Has the employee followed administrative procedures and job instructions properly?</td>
                         <td>{{ $review->followed_instructions }} / {{ $review->comments_followed_instructions }}</td>
                     </tr>
                     <tr>
-                        <td>Does the employee effectively manage time and stay productive during working hours?</td>
+                        <td>5. Does the employee effectively manage time and stay productive during working hours?</td>
                         <td>{{ $review->productive }} / {{ $review->comments_productive }}</td>
                     </tr>
                     <tr>
-                        <td>How well does the employee handle changes in schedules or assignments?</td>
+                        <td>6. How well does the employee handle changes in schedules or assignments?</td>
                         <td>{{ $review->changes_schedules }} / {{ $review->comments_changes_schedules }}</td>
                     </tr>
                     <tr>
-                        <td>Does the employee consistently adhere to the company's leave policy?</td>
+                        <td>7. Does the employee consistently adhere to the company's leave policy?</td>
                         <td>{{ $review->leave_policy }} / {{ $review->comments_leave_policy }}</td>
                     </tr>
                     <tr>
-                        <td>Has there been any salary deduction due to the employee's leave?</td>
+                        <td>8. Has there been any salary deduction due to the employee's leave?</td>
                         <td>{{ $review->salary_deduction }} / {{ $review->comments_salary_deduction }}</td>
                     </tr>
                     <tr>
-                        <td>How well does the employee interact with the housekeeping staff?</td>
+                        <td>9. How well does the employee interact with the housekeeping staff?</td>
                         <td>{{ $review->interact_housekeeping }} / {{ $review->comments_interact_housekeeping }}</td>
                     </tr>
                     <tr>

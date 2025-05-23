@@ -574,7 +574,7 @@ class allUserController extends Controller
         }
 
         // 3. Check evaluation for this emp_id and financial_year
-        $evaluation = EvaluationTable::where('emp_id', $emp_id)
+        $evaluation = evaluationTable::where('emp_id', $emp_id)
             ->where('financial_year', $financial_year)
             ->first();
 
@@ -657,6 +657,13 @@ class allUserController extends Controller
 
         return response()->json(['message' => 'Review submitted successfully!']);
     }
+
+
+
+
+
+
+
 
     public function client()
     {
@@ -1127,6 +1134,7 @@ class allUserController extends Controller
 //         ->whereNotIn('user_type', ['admin', 'hr']) // Filter out admin and hr
 //         ->pluck('employee_id')
 //         ->toArray();
+
 //     // Step 4: Fetch only manager reviews and evaluations for the filtered users
 //     $managerReviewTable = ManagerReviewTable::whereIn('emp_id', $nonAdminHrEmployeeIds)->get();
 //     $evaluation = evaluationTable::whereIn('emp_id', $nonAdminHrEmployeeIds)->get();
@@ -1211,43 +1219,52 @@ class allUserController extends Controller
     }
 
 
-
-
-
-
     //Handle User Review table in side User Review Report for Employee blade file
-    public function getReviewScores(Request $request)
+     public function getReviewScores(Request $request)
     {
-        $empId = session('employee_id');
-        $year = $request->query('financial_year');
+        // $empId = session('employee_id');
+    $empId = $request->input('emp_id') ?? $request->input('employee_id');
+    $year = $request->query('financial_year');
 
-        $financialData = FinancialData::where('emp_id', $empId)
-            ->where('financial_year', $year)
-            ->first();
+        $user = SuperAddUser::where('employee_id', $empId)->first();
+        $roles = json_decode($user?->user_roles ?? '[]', true);
+        $showClient = in_array('client', $roles);
+
         $evaluation = evaluationTable::where('emp_id', $empId)
             ->where('financial_year', $year)
             ->first();
 
+        $adminReview = AdminReviewTable::where('emp_id', $empId)
+            ->where('financial_year', $year)
+            ->first();
 
-        $user = SuperAddUser::where('employee_id', $empId)->first();
-        $roles = json_decode($user?->user_roles ?? '[]', true);
+        $hrReview = HrReviewTable::where('emp_id', $empId)
+            ->where('financial_year', $year)
+            ->first();
 
+        $managerReview = ManagerReviewTable::where('emp_id', $empId)
+            ->where('financial_year', $year)
+            ->first();
 
-        $showClient = in_array('client', $roles);
-
-        //
+        $clientReview = null;
+        if ($showClient) {
+            $clientReview = ClientReviewTable::where('emp_id', $empId)
+                ->where('financial_year', $year)
+                ->first();
+        }
+       
         $response = [
-            'admin' => $financialData?->admin_review,
-            'hr' => $financialData?->hr_review,
-            'manager' => $financialData?->manager_review,
+            'admin' => $adminReview?->AdminTotalReview,
+            'hr' => $hrReview?->HrTotalReview,
+            'managerTotal' => $managerReview?->ManagerTotalReview,
             'total' => $evaluation?->total_scoring_system,
             'showClient' => $showClient,
         ];
 
 
-        if ($showClient) {
-            $response['client'] = $financialData?->client_review;
-        }
+       if ($showClient) {
+        $response['clientTotal'] = $clientReview?->ClientTotalReview;
+    }
 
 
         return response()->json($response);

@@ -5,27 +5,27 @@
             <td>{{ $user->emp_id }}</td>
         </tr> --}}
         <tr>
-            <th>How would you rate the employee’s adherence to company policies and procedures?</th>
+            <th>1. How would you rate the employee’s adherence to company policies and procedures?</th>
             <td>{{ $user->adherence_hr }} / {{ $user->comments_adherence_hr }}</td>
         </tr>
         <tr>
-            <th>Does the employee maintain professionalism and a positive attitude in the workplace?</th>
+            <th>2. Does the employee maintain professionalism and a positive attitude in the workplace?</th>
             <td>{{ $user->professionalism_positive }} / {{ $user->comments_professionalism }}</td>
         </tr>
         <tr>
-            <th>How well does the employee respond to feedback or suggestions for improvement from colleagues?</th>
+            <th>3. How well does the employee respond to feedback or suggestions for improvement from colleagues?</th>
             <td>{{ $user->respond_feedback }} / {{ $user->comments_respond_feedback }}</td>
         </tr>
         <tr>
-            <th>Does the employee take the initiative to seek feedback and act on it?</th>
+            <th>4. Does the employee take the initiative to seek feedback and act on it?</th>
             <td>{{ $user->initiative }} / {{ $user->comments_initiative }}</td>
         </tr>
         <tr>
-            <th>Has the employee shown interest in learning and participating in training programs?</th>
+            <th>5. Has the employee shown interest in learning and participating in training programs?</th>
             <td>{{ $user->interest_learning }} / {{ $user->comments_interest_learning }}</td>
         </tr>
         <tr>
-            <th>Does the employee consistently adhere to the company's leave policy?</th>
+            <th>6. Does the employee consistently adhere to the company's leave policy?</th>
             <td>{{ $user->company_leave_policy }} / {{ $user->comments_company_leave_policy }}</td>
         </tr>
         <tr>

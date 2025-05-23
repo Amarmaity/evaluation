@@ -359,6 +359,9 @@
 
     // Keep only the selected row in the table
     var selectedRow = $(this).clone();
+     // Add highlight class to the clone
+    selectedRow.addClass('table-active');
+    
     $('#employeeTableBody').empty().append(selectedRow);
 });
 });

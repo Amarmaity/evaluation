@@ -64,15 +64,15 @@
                  
 
                 <tr>
-                    <td>Accuracy, neatness and timeliness of work</td>
+                    <td>1. Accuracy, neatness and timeliness of work</td>
                     <td>{{ $evaluation->accuracy_neatness }} / {{ $evaluation->comments_accuracy }}</td>
                 </tr>
                 <tr>
-                    <td>Adherence to duties and procedures in Job Description and Work Instructions</td>
+                    <td>2. Adherence to duties and procedures in Job Description and Work Instructions</td>
                     <td>{{ $evaluation->adherence }} / {{ $evaluation->comments_adherence }}</td>
                 </tr>
                 <tr>
-                    <td>Synchronization with organizations/functional goals</td>
+                    <td>3. Synchronization with organizations/functional goals</td>
                     <td>{{ $evaluation->synchronization }} / {{ $evaluation->comments_synchronization }}</td>
                 </tr>
                 <tr>
@@ -80,35 +80,35 @@
                     <td>{{ $evaluation->qualityworktotalrating }}</td>
                 </tr>
                 <tr>
-                    <td>Punctuality to workplace</td>
+                    <td>1. Punctuality to workplace</td>
                     <td>{{ $evaluation->punctuality }} / {{ $evaluation->comments_punctuality }}</td>
                 </tr>
                 <tr>
-                    <td>Attendance</td>
+                    <td>2. Attendance</td>
                     <td>{{ $evaluation->attendance }} / {{ $evaluation->comments_attendance }}</td>
                 </tr>
                 <tr>
-                    <td>Does the employee stay busy, look for things to do, take initiatives at workplace</td>
+                    <td>3. Does the employee stay busy, look for things to do, take initiatives at workplace</td>
                     <td>{{ $evaluation->initiatives_at_workplace }} / {{ $evaluation->comments_initiatives }}</td>
                 </tr>
                 <tr>
-                    <td>Submits reports on time and meets deadlines</td>
+                    <td>4. Submits reports on time and meets deadlines</td>
                     <td>{{ $evaluation->submits_reports }} / {{ $evaluation->comments_submits_reports }}</td>
                 </tr>
                 <tr>
-                    <td>Work Habits Rating</td>
+                    <td>Work Habits Total Rating</td>
                     <td>{{ $evaluation->work_habits_rating }}</td>
                 </tr>
                 <tr>
-                    <td>Skill and ability to perform job satisfactorily</td>
+                    <td>1. Skill and ability to perform job satisfactorily</td>
                     <td>{{ $evaluation->skill_ability }} / {{ $evaluation->comments_skill_ability }}</td>
                 </tr>
                 <tr>
-                    <td>Shown interest in learning and improving</td>
+                    <td>2. Shown interest in learning and improving</td>
                     <td>{{ $evaluation->learning_improving }} / {{ $evaluation->comments_learning_improving }}</td>
                 </tr>
                 <tr>
-                    <td>Problem solving ability</td>
+                    <td>3. Problem solving ability</td>
                     <td>{{ $evaluation->problem_solving_ability }} / {{ $evaluation->comments_problem_solving }}</td>
                 </tr>
                 <tr>
@@ -133,23 +133,23 @@
                     <td>{{ $evaluation->evaluator_signatur_date }}</td>
                 </tr>
                 <tr>
-                    <td>Responds and contributes to team efforts</td>
+                    <td>1. Responds and contributes to team efforts</td>
                     <td>{{$evaluation->respond_contributes}} / {{$evaluation->comments_respond_contributes}}
                 </tr>
                 <tr>
-                    <td>Responds positively to suggestions, instructions, and criticism</td>
+                    <td>2. Responds positively to suggestions, instructions, and criticism</td>
                     <td>{{$evaluation->responds_positively}} / {{$evaluation->comments_responds_positively}}</td>
                 </tr>
                 <tr>
-                    <td>Keeps supervisor informed of all details</td>
+                    <td>3. Keeps supervisor informed of all details</td>
                     <td>{{$evaluation->supervisor}} / {{$evaluation->comments_supervisor}}</td>
                 </tr>
                 <tr>
-                    <td>Adapts well to changing circumstances</td>
+                    <td>4. Adapts well to changing circumstances</td>
                     <td>{{$evaluation->adapts_changing}} / {{$evaluation->comments_adapts_changing}}</td>
                 </tr>
                 <tr>
-                    <td>Seeks feedback to improve</td>
+                    <td>5. Seeks feedback to improve</td>
                     <td>{{$evaluation->seeks_feedback}} / {{$evaluation->comments_seeks_feedback}}</td>
                 </tr>
                 <tr>
@@ -157,15 +157,15 @@
                     <td>{{$evaluation->ir_total_rating}}</td>
                 </tr>
                 <tr>
-                    <td>Aspirant to climb up the ladder, accepts challenges, new responsibilities, and roles</td>
+                    <td>1. Aspirant to climb up the ladder, accepts challenges, new responsibilities, and roles</td>
                     <td>{{$evaluation->challenges}} / {{$evaluation->comments_challenges}}</td>
                 </tr>
                 <tr>
-                    <td>Innovative thinking - contribution to organizations, functions, and personal growth</td>
+                    <td>2. Innovative thinking - contribution to organizations, functions, and personal growth</td>
                     <td>{{$evaluation->personal_growth}} / {{$evaluation->comments_personal_growth}}</td>
                 </tr>
                 <tr>
-                    <td>Work motivation</td>
+                    <td>3. Work motivation</td>
                     <td>{{$evaluation->work_motivation}} / {{$evaluation->comments_work_motivation}}
                     <td>
                 </tr>
@@ -174,16 +174,16 @@
                     <td>{{$evaluation->leadership_rating}}</td>
                 </tr>
                 <tr>
-                    <td>Employee performance and learning is unsatisfactory and is failing to improve at a satisfactory rate
+                    <td>1. Employee performance and learning is unsatisfactory and is failing to improve at a satisfactory rate
                     </td>
                     <td>{{$evaluation->progress_unsatisfactory}} / {{$evaluation->comments_unsatisfactory}}</td>
                 </tr>
                 <tr>
-                    <td>Employee performance and learning is acceptable and is improving at a satisfactory rate</td>
+                    <td>2. Employee performance and learning is acceptable and is improving at a satisfactory rate</td>
                     <td>{{$evaluation->progress_acceptable}} / {{$evaluation->comments_acceptable}}</td>
                 </tr>
                 <tr>
-                    <td>Employee has successfully demonstrated outstanding overall performance</td>
+                    <td>3. Employee has successfully demonstrated outstanding overall performance</td>
                     <td>{{$evaluation->progress_outstanding}} / {{$evaluation->comments_outstanding}}</td>
                 </tr>
                 <tr>

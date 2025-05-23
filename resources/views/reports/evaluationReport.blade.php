@@ -132,15 +132,15 @@
 
                     <!-- Ratings and Comments -->
                     <tr>
-                        <td>Accuracy, neatness and timeliness of work</td>
+                        <td>1. Accuracy, neatness and timeliness of work</td>
                         <td>{{ $user->accuracy_neatness }} / {{ $user->comments_accuracy }}</td>
                     </tr>
                     <tr>
-                        <td>Adherence to duties and procedures in Job Description and Work Instructions</td>
+                        <td>2. Adherence to duties and procedures in Job Description and Work Instructions</td>
                         <td>{{ $user->adherence }} / {{ $user->comments_adherence }}</td>
                     </tr>
                     <tr>
-                        <td>Synchronization with organizations/functional goals</td>
+                        <td>3. Synchronization with organizations/functional goals</td>
                         <td>{{ $user->synchronization }} / {{ $user->comments_synchronization }}</td>
                     </tr>
                     <tr>
@@ -148,45 +148,45 @@
                         <td>{{ $user->qualityworktotalrating }}</td>
                     </tr>
                     <tr>
-                        <td>Punctuality to workplace</td>
+                        <td>1. Punctuality to workplace</td>
                         <td>{{ $user->punctuality }} / {{ $user->comments_punctuality }}</td>
                     </tr>
                     <tr>
-                        <td>Attendance</td>
+                        <td>2. Attendance</td>
                         <td>{{ $user->attendance }} / {{ $user->comments_attendance }}</td>
                     </tr>
                     <tr>
-                        <td>Does the employee stay busy, look for things to do, take initiatives at workplace</td>
+                        <td>3. Does the employee stay busy, look for things to do, take initiatives at workplace</td>
                         <td>{{ $user->initiatives_at_workplace }} / {{ $user->comments_initiatives }}</td>
                     </tr>
                     <tr>
-                        <td>Submits reports on time and meets deadlines</td>
+                        <td>4. Submits reports on time and meets deadlines</td>
                         <td>{{ $user->submits_reports }} / {{ $user->comments_submits_reports }}</td>
                     </tr>
                     <tr>
-                        <td>Work Habits Rating</td>
+                        <td>Work Habits Total Rating</td>
                         <td>{{ $user->work_habits_rating }}</td>
                     </tr>
                     <tr>
-                        <td>Skill and ability to perform job satisfactorily</td>
+                        <td>1. Skill and ability to perform job satisfactorily</td>
                         <td>{{ $user->skill_ability }} / {{ $user->comments_skill_ability }}</td>
                     </tr>
                     <tr>
-                        <td>Shown interest in learning and improving</td>
+                        <td>2. Shown interest in learning and improving</td>
                         <td>{{ $user->learning_improving }} / {{ $user->comments_learning_improving }}</td>
                     </tr>
                     <tr>
-                        <td>Problem solving ability</td>
+                        <td>3. Problem solving ability</td>
                         <td>{{ $user->problem_solving_ability }} / {{ $user->comments_problem_solving }}</td>
                     </tr>
                     <tr>
                         <td>Job Knowledge Total Rating</td>
                         <td>{{ $user->jk_total_rating }}</td>
                     </tr>
-                    <tr>
+                    {{-- <tr>
                         <td>Recommendation</td>
                         <td>{{ $user->recomendation }}</td>
-                    </tr>
+                    </tr> --}}
                     <tr>
                         <td>Evaluator's Name</td>
                         <td>{{ $user->evalutors_name }}</td>
@@ -204,60 +204,60 @@
                         <td>{{ $user->evaluator_signatur_date }}</td>
                     </tr>
                     <tr>
-                        <td>Responds and contributes to team efforts</td>
-                        <td>{{ $user->respond_contributes }} / {{ $user->comments_respond_contributes }}</td>
+                        <td>1. Responds and contributes to team efforts</td>
+                        <td>{{ $user->respond_contributes }} - {{ $user->comments_respond_contributes }}</td>
                     </tr>
                     <tr>
-                        <td>Responds positively to suggestions, instructions, and criticism</td>
-                        <td>{{ $user->responds_positively }} / {{ $user->comments_responds_positively }}</td>
+                        <td>2. Responds positively to suggestions, instructions, and criticism</td>
+                        <td>{{ $user->responds_positively }} - {{ $user->comments_responds_positively }}</td>
                     </tr>
                     <tr>
-                        <td>Keeps supervisor informed of all details</td>
-                        <td>{{ $user->supervisor }} / {{ $user->comments_supervisor }}</td>
+                        <td>3. Keeps supervisor informed of all details</td>
+                        <td>{{ $user->supervisor }} - {{ $user->comments_supervisor }}</td>
                     </tr>
                     <tr>
-                        <td>Adapts well to changing circumstances</td>
-                        <td>{{ $user->adapts_changing }} / {{ $user->comments_adapts_changing }}</td>
+                        <td>4. Adapts well to changing circumstances</td>
+                        <td>{{ $user->adapts_changing }} - {{ $user->comments_adapts_changing }}</td>
                     </tr>
                     <tr>
-                        <td>Seeks feedback to improve</td>
-                        <td>{{ $user->seeks_feedback }} / {{ $user->comments_seeks_feedback }}</td>
+                        <td>5. Seeks feedback to improve</td>
+                        <td>{{ $user->seeks_feedback }} - {{ $user->comments_seeks_feedback }}</td>
                     </tr>
                     <tr>
                         <td>Interpersonal Relations Total Rating</td>
                         <td>{{ $user->ir_total_rating }}</td>
                     </tr>
                     <tr>
-                        <td>Aspirant to climb up the ladder, accepts challenges, new responsibilities, and roles
+                        <td>1. Aspirant to climb up the ladder, accepts challenges, new responsibilities, and roles
                         </td>
-                        <td>{{ $user->challenges }} / {{ $user->comments_challenges }}</td>
+                        <td>{{ $user->challenges }} - {{ $user->comments_challenges }}</td>
                     </tr>
                     <tr>
-                        <td>Innovative thinking - contribution to organizations, functions, and personal growth</td>
-                        <td>{{ $user->personal_growth }} / {{ $user->comments_personal_growth }}</td>
+                        <td>2. Innovative thinking - contribution to organizations, functions, and personal growth</td>
+                        <td>{{ $user->personal_growth }} - {{ $user->comments_personal_growth }}</td>
                     </tr>
                     <tr>
-                        <td>Work motivation</td>
-                        <td>{{ $user->work_motivation }} / {{ $user->comments_work_motivation }}</td>
+                        <td>3. Work motivation</td>
+                        <td>{{ $user->work_motivation }} - {{ $user->comments_work_motivation }}</td>
                     </tr>
                     <tr>
                         <td>Leadership Skill Total Rating</td>
                         <td>{{ $user->leadership_rating }}</td>
                     </tr>
                     <tr>
-                        <td>Employee performance and learning is unsatisfactory and is failing to improve at a
+                        <td>1. Employee performance and learning is unsatisfactory and is failing to improve at a
                             satisfactory
                             rate</td>
-                        <td>{{ $user->progress_unsatisfactory }} / {{ $user->comments_unsatisfactory }}</td>
+                        <td>{{ $user->progress_unsatisfactory }} - {{ $user->comments_unsatisfactory }}</td>
                     </tr>
                     <tr>
-                        <td>Employee performance and learning is acceptable and is improving at a satisfactory rate
+                        <td>2. Employee performance and learning is acceptable and is improving at a satisfactory rate
                         </td>
-                        <td>{{ $user->progress_acceptable }} / {{ $user->comments_acceptable }}</td>
+                        <td>{{ $user->progress_acceptable }} - {{ $user->comments_acceptable }}</td>
                     </tr>
                     <tr>
-                        <td>Employee has successfully demonstrated outstanding overall performance</td>
-                        <td>{{ $user->progress_outstanding }} / {{ $user->comments_outstanding }}</td>
+                        <td>3. Employee has successfully demonstrated outstanding overall performance</td>
+                        <td>{{ $user->progress_outstanding }} - {{ $user->comments_outstanding }}</td>
                     </tr>
                     <tr>
                         <td>Total score in evaluation:</td>
@@ -292,11 +292,11 @@
                         <form action="{{ route('director-submit-from', $user->emp_id) }}" method="POST" id="evaluationSubmit"
                             class="evaluation__form" enctype="multipart/form-data">
                             @csrf
-                            <div class="form-section">
+                            <div class="form-section form-section1">
                                 <h3>Director Upload</h3>
                                 <div class="mb-4">
                                     <label for="final_comment">FINAL COMMENTS:</label>
-                                    <textarea name="final_comment" id="f_comment" rows="5" class="form-control"></textarea>
+                                    <textarea name="final_comment" id="f_comment" rows="1" class="form-control"></textarea>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
@@ -318,8 +318,8 @@
                                 </div> --}}
                             </div>
                             <div class="mt-4">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                                <button type="reset" class="btn btn-outlined">Clear</button>
+                                <button type="submit" class="btn btn-primary secondary-btn">Submit</button>
+                                <button type="reset" class="btn btn-outlined secondary-btn">Clear</button>
                             </div>
                         </form>
                     @endif

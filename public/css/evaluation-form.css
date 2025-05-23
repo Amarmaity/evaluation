@@ -21,6 +21,19 @@ h1 {
     text-transform: capitalize;
 }
 
+.sidebar-wrapper .nav-item:hover .bi::before,
+[class*=" bi-"]::before,
+[class^=bi-]::before {
+    color: #000000;
+}
+
+.sidebar-wrapper .nav-item .nav-link.active .bi::before,
+[class*=" bi-"]::before,
+[class^=bi-]::before {
+    color: #000000;
+}
+
+
 .bi::before,
 [class*=" bi-"]::before,
 [class^=bi-]::before {
@@ -38,6 +51,81 @@ body.special-page .app-main .app-main__div {
     border-radius: 20px !important;
     margin-bottom: 30px !important;
 }
+
+.table-responsive {
+    border-radius: 10px;
+    overflow-y: hidden;
+    border: 0.67px solid #B5B5B5;
+    overflow-x: scroll;
+
+}
+
+.table-wrapper {
+    border-radius: 10px;
+    overflow-y: hidden;
+    border: 0.67px solid #B5B5B5;
+    overflow-x: scroll;
+}
+
+.table>:not(:first-child) {
+    border-top: unset !important;
+}
+
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 0.67px solid #B5B5B5;
+    margin-bottom: 0px !important;
+}
+
+.main-table {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 0.67px solid #B5B5B5;
+    margin-bottom: 0px !important;
+}
+
+.table th {
+    background-color: #FFFFFF !important;
+}
+
+.table th {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: #000000 !important;
+    padding: 10px !important;
+}
+
+.main-table th {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: #4B4A4A8C !important;
+    padding: 24px 28px !important;
+}
+
+
+.table td {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: #000000 !important;
+    padding: 10px !important;
+}
+
+.main-table td {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: #000000 !important;
+    padding: 24px 18px !important;
+}
+
 
 button {
     width: unset !important;
@@ -271,12 +359,6 @@ h4 {
     border: 1px solid #00000033 !important;
 }
 
-.table-wrapper {
-    border-radius: 10px;
-    overflow-y: hidden;
-    border: 0.67px solid #B5B5B5;
-    overflow-x: scroll;
-}
 
 .table-wrapper--modified {
     margin-top: 40px;
@@ -338,13 +420,40 @@ h4 {
     letter-spacing: 0;
 
 }
-.secondary-btn{
+
+.btn-secondary {
+    background-color: #FFFFFF !important;
+    font-size: 14px !important;
+    padding: 18px 20px !important;
+    color: #000000 !important;
+    border-radius: 12px !important;
+    max-width: 200px;
+    min-width: 150px;
+    max-height: 56px;
+    min-height: 56px;
+    border: 1.21px solid #FFFFFF;
+    transition: all 0.3s ease;
+    margin-bottom: 26px;
+}
+
+.btn-secondary:hover {
+    background-color: #00274D !important;
+    border: 1.21px solid #00000033;
+    color: #FFFFFF !important;
+}
+
+.secondary-btn {
     background-color: #00274D !important;
     font-size: 14px !important;
     padding: 18px 20px !important;
     color: #FFFFFF !important;
     border-radius: 12px !important;
+    max-width: 200px;
+    min-width: 150px;
+    max-height: 56px;
+    min-height: 56px;
 }
+
 .content-block {
     background-color: #FFFFFF;
     border-radius: 20px;
@@ -369,6 +478,18 @@ h4 {
     border-radius: 12px !important;
     color: #FFFFFF !important;
 }
+
+.form-section1 {
+    box-shadow: none !important;
+}
+
+.form-section1 textarea {
+    padding: 13px 0px 13px 24px;
+    resize: none;
+    border-radius: 10px;
+    margin-bottom: 0px;
+}
+
 
 .form-section1 .btn.btn-primary {
     background-color: #00274D !important;
@@ -472,30 +593,6 @@ h4 {
     padding: 24px 28px !important;
 }
 
-.main-table {
-    border-radius: 10px;
-    overflow: hidden;
-    border: 0.67px solid #B5B5B5;
-    margin-bottom: 0px !important;
-}
-
-.main-table th {
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 1.4;
-    letter-spacing: 0;
-    color: #4B4A4A8C !important;
-    padding: 24px 28px !important;
-}
-
-.main-table td {
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 1.4;
-    letter-spacing: 0;
-    color: #000000 !important;
-    padding: 24px 18px !important;
-}
 
 .main-table .btn.btn-primary {
     background-color: #00274D;

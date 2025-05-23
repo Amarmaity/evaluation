@@ -62,23 +62,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach ($users as $user)
-                            <tr data-status="{{ $user->status ? '1' : '2' }}">
-                    <td>{{ $user->fname }} {{ $user->lname }}</td>
-                    <td>{{ $user->employee_id }}</td>
-                    <td>{{ $user->designation }}</td>
-                    <td>{{ $user->salary }}</td>
-                    <td>{{ $user->mobno }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td id="status-{{ $user->employee_id }}">{{ $user->status ? 'Active' : 'Inactive' }}</td>
-                    <td>
-                        <button class="toggle-btn {{ $user->status ? 'btn-red' : 'btn-green' }}"
-                            data-user-id="{{ $user->employee_id }}">
-                            {{ $user->status ? 'Deactivate' : 'Activate' }}
-                        </button>
-                    </td>
-                    </tr>
-                    @endforeach --}}
                     @foreach ($users as $user)
                     <tr data-status="{{ $user->status ? '1' : '2' }}">
                         <td>{{ $user->fname }} {{ $user->lname }}</td>
@@ -111,12 +94,13 @@ $(document).ready(function() {
     var table = $('#userTable').DataTable({
         "paging": false,
         "searching": true,
-        "ordering": false,
+        "ordering": true,
         "info": false,
         "paging": true,
         "lengthChange": false,
         "pageLength": 10,
         "lengthMenu": [5, 10, 25, 50, 100],
+        "order": [[2, 'desc']],
     });
 
     // Bind the custom search input
@@ -125,46 +109,6 @@ $(document).ready(function() {
     });
 });
 
-// $(document).on("click", ".toggle-btn", function () {
-//     let userId = $(this).data("user-id");
-//     console.log("Toggling user ID:", userId); // ← Add this
-
-//     let button = $(this);
-
-//     $.ajax({
-//         url: `/toggle-status/${userId}`,
-//         type: "POST",
-//         headers: {
-//             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-//         },
-//         success: function (response) {
-//             if (response.success) {
-//                 let dataTable = $('#userTable').DataTable();
-//                 let row = button.closest('tr');
-//                 let rowData = dataTable.row(row).data();
-
-//                 // Update status column (assumed index 6)
-//                 rowData[6] = response.new_status ? "Active" : "Inactive";
-
-//                 // Rebuild button HTML with correct class and label (assumed index 7)
-//                 let newBtnClass = response.new_status ? 'btn-red' : 'btn-green';
-//                 let newBtnLabel = response.new_status ? 'Deactivate' : 'Activate';
-//                 let newButtonHTML = `<button class="toggle-btn ${newBtnClass}" data-user-id="${userId}">${newBtnLabel}</button>`;
-
-//                 // Replace button column
-//                 rowData[7] = newButtonHTML;
-
-//                 // Update DataTable row
-//                 dataTable.row(row).data(rowData).invalidate().draw(false);
-//             } else {
-//                 alert("Failed to update status: " + response.error);
-//             }
-//         },
-//         error: function () {
-//             alert("Error toggling status");
-//         }
-//     });
-// });
 $(document).on("click", ".toggle-btn", function() {
     let userType = $(this).data("user-type");
     let identifier = $(this).data("identifier");
@@ -201,6 +145,7 @@ $(document).on("click", ".toggle-btn", function() {
 
                 // Re-sort table by Status column (column index 6)
                 dataTable.order([6, 'desc']).draw(); // "Inactive" comes after "Active"
+                table.order([2, 'desc']).draw();
             } else {
                 alert("Failed to update status: " + response.error);
             }

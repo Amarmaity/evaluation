@@ -145,105 +145,6 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
     <script>
-
-        // $(document).ready(function () {
-        //     let table = $('#employeeTable').DataTable({
-        //         dom: '<"top"lfr>t<"bottom"ip><"clear">',
-        //         paging: true,
-        //         searching: true,
-        //         ordering: true,
-        //         info: true,
-        //         lengthChange: true,
-        //         pageLength: 10,
-        //         language: {
-        //             emptyTable: "No employee data available for this financial year"
-        //         },
-        //         initComplete: function () {
-        //             const filterDiv = $('div.dataTables_filter');
-        //             const label = filterDiv.find('label');
-        //             const input = label.find('input');
-
-        //             label.after(input);
-        //             label.remove();
-
-        //             filterDiv.css({
-        //                 'display': 'flex',
-        //                 'align-items': 'center',
-        //                 'gap': '20px',
-        //                 'justify-content': 'flex-start',
-        //                 'margin-bottom': '10px'
-        //             });
-
-        //             input.attr('placeholder', 'Search Employees...');
-        //             input.css({
-        //                 'padding': '6px',
-        //                 'border-radius': '4px',
-        //                 'border': '1px solid #ccc',
-        //                 'width': '200px'
-        //             });
-
-        //             Financial year dropdown
-        //             filterDiv.append(`
-        //                 <select id="financialYearFilter" class="form-control" style="padding:6px; border-radius:4px; border:1px solid #ccc; width: 200px;">
-        //                     <option value="" selected>Select Financial Years</option>
-        //                     <option value="2025-2026">2025-2026</option>
-        //                     <option value="2026-2027">2026-2027</option>
-        //                     <option value="2027-2028">2027-2028</option>
-        //                     <option value="2028-2029">2028-2029</option>
-        //                     <option value="2029-2030">2029-2030</option>
-        //                 </select>
-        //             `);
-        //         }
-        //     });
-
-
-
-
-
-
-        //     // Filter by Financial Year
-        //     $(document).on('change', '#financialYearFilter', function () {
-        //         const selectedYear = $(this).val();
-
-        //         if (selectedYear !== '') {
-        //             $.ajax({
-        //                 url: '/employees/filter-financial-year',
-        //                 method: 'POST',
-        //                 data: {
-        //                     financial_year: selectedYear,
-        //                     _token: '{{ csrf_token() }}'
-        //                 },
-        //                 success: function (response) {
-        //                     table.clear();
-
-        //                     if (response.data.length > 0) {
-        //                         response.data.forEach(function (employee) {
-        //                             table.row.add([
-        //                                 employee[0],
-        //                                 employee[1],
-        //                                 employee[2],
-        //                                 employee[3],
-        //                                 employee[4],
-        //                                 employee[5],
-        //                                 employee[6],
-        //                                 employee[7],
-        //                                 employee[8],
-        //                                 employee[9]
-        //                             ]);
-        //                         });
-        //                     }
-
-        //                     table.draw(); // Always call draw (even if no data)
-        //                 },
-        //                 error: function (xhr, status, error) {
-        //                     console.error("Error fetching data: " + error);
-        //                 }
-        //             });
-        //         } else {
-        //             table.clear().draw(); // Clear if "Select Financial Years" is chosen
-        //         }
-        //     });
-        // });
         $(document).ready(function () {
             let table = $('#employeeTable').DataTable({
                 dom: '<"top"lfr>t<"bottom"ip><"clear">',
@@ -252,6 +153,7 @@
                 info: true,
                 lengthChange: true,
                "lengthChange": false,
+                order: [[3, 'desc']],
                 language: {
                     emptyTable: "No employee data available for this financial year"
                 }
@@ -278,7 +180,7 @@
                             table.clear();
 
                             if (response.data.length > 0) {
-                                response.data.forEach(function (employee) {
+                                response.data.reverse().forEach(function (employee) {
                                     table.row.add([
                                         employee[0],
                                         employee[1],

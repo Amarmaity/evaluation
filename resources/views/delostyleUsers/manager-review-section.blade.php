@@ -14,13 +14,13 @@
 
 
 <style>
-/* Loading animation */
-.loading {
-    color: blue;
-    font-weight: bold;
-    font-size: 14px;
-    text-align: center;
-}
+    /* Loading animation */
+    .loading {
+        color: blue;
+        font-weight: bold;
+        font-size: 14px;
+        text-align: center;
+    }
 </style>
 
 <head>
@@ -102,8 +102,7 @@
                                 experience:</label>
                             <textarea name="comments_rate_employee_quality" id="comments" class="form-control" rows="1"
                                 cols="50" maxlength="255"
-                                placeholder="What made you give this rating? Share specific examples or feedback to help us improve."
-                            ></textarea>
+                                placeholder="What made you give this rating? Share specific examples or feedback to help us improve."></textarea>
                         </div>
                         <label for="organizational_goals" class="second-label">2. Does the employee align their work
                             with
@@ -128,8 +127,7 @@
                                 experience:</label>
                             <textarea name="comments_organizational_goals" id="comments" class="form-control" rows="1"
                                 cols="50" maxlength="255"
-                                placeholder="What made you give this rating? Share specific examples or feedback to help us improve."
-                            ></textarea>
+                                placeholder="What made you give this rating? Share specific examples or feedback to help us improve."></textarea>
                         </div>
 
                         <div>
@@ -155,8 +153,7 @@
                                 experience:</label>
                             <textarea name="comments_collaborate_colleagues" id="comments" class="form-control" rows="1"
                                 cols="50" maxlength="255"
-                                placeholder="What made you give this rating? Share specific examples or feedback to help us improve."
-                            ></textarea>
+                                placeholder="What made you give this rating? Share specific examples or feedback to help us improve."></textarea>
                         </div>
 
                         <div>
@@ -182,8 +179,7 @@
                                 experience:</label>
                             <textarea name="comments_demonstrated" id="comments" class="form-control" rows="1" cols="50"
                                 maxlength="255"
-                                placeholder="What made you give this rating? Share specific examples or feedback to help us improve."
-                            ></textarea>
+                                placeholder="What made you give this rating? Share specific examples or feedback to help us improve."></textarea>
                         </div>
 
                         <div>
@@ -210,8 +206,7 @@
                                 experience:</label>
                             <textarea name="comments_leadership_responsibilities" id="comments" class="form-control"
                                 rows="1" cols="50" maxlength="255"
-                                placeholder="What made you give this rating? Share specific examples or feedback to help us improve."
-                            ></textarea>
+                                placeholder="What made you give this rating? Share specific examples or feedback to help us improve."></textarea>
                         </div>
 
                         <div>
@@ -264,8 +259,7 @@
                                 experience:</label>
                             <textarea name="comments_comments_informed_progress" id="comments" class="form-control"
                                 rows="1" cols="50" maxlength="255"
-                                placeholder="What made you give this rating? Share specific examples or feedback to help us improve."
-                            ></textarea>
+                                placeholder="What made you give this rating? Share specific examples or feedback to help us improve."></textarea>
                         </div>
                     </div>
                 </div>
@@ -300,7 +294,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-$(function() {
+    $(function() {
     let timeout = null;
 
     function searchUser() {
@@ -358,6 +352,10 @@ $(function() {
 
         // Keep only the selected row in the table
         var selectedRow = $(this).clone();
+
+         // Add highlight class to the clone
+    selectedRow.addClass('table-active');
+
         $('#employeeTableBody').empty().append(selectedRow);
     });
 });

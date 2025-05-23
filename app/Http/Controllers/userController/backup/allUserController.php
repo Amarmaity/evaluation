@@ -865,7 +865,6 @@ class allUserController extends Controller
 
     public function clientReport(Request $request, $emp_id)
     {
-
         $financialYear = $request->get('financial_year');
 
         $user = ClientReviewTable::where('emp_id', $emp_id)
@@ -947,7 +946,7 @@ class allUserController extends Controller
         $hrReviewTable = HrReviewTable::whereIn('emp_id', $validEmployeeIds)->get();
         $evaluation = evaluationTable::whereIn('emp_id', $nonAdminEmployeeIds)->get();
 
-        $superAddUser = $superAddUser->where('user_type', '!=', ['admin','manager'])->values();
+        $superAddUser = $superAddUser->where('user_type', '!=', ['admin', 'manager'])->values();
         return view('reports.hrReportView', compact('superAddUser', 'hrReviewTable', 'evaluation'));
     }
 
@@ -1030,34 +1029,34 @@ class allUserController extends Controller
 
 
     public function getAdminReviewList(Request $request)
-{
-    // Step 1: Get all unique emp_ids from both tables
-    $validEmployeeIds = AdminReviewTable::pluck('emp_id')
-        ->merge(evaluationTable::pluck('emp_id'))
-        ->unique()
-        ->toArray();
+    {
+        // Step 1: Get all unique emp_ids from both tables
+        $validEmployeeIds = AdminReviewTable::pluck('emp_id')
+            ->merge(evaluationTable::pluck('emp_id'))
+            ->unique()
+            ->toArray();
 
-    // Step 2: Get active SuperAddUser records for these IDs
-    $superAddUser = SuperAddUser::where('status', 1)
-        ->whereIn('employee_id', $validEmployeeIds)
-        ->get();
+        // Step 2: Get active SuperAddUser records for these IDs
+        $superAddUser = SuperAddUser::where('status', 1)
+            ->whereIn('employee_id', $validEmployeeIds)
+            ->get();
 
-    // Step 3: Exclude users with user_type 'hr' or 'manager'
-    $nonHrManagerEmployeeIds = $superAddUser
-        ->whereNotIn('user_type', ['hr', 'manager']) // Exclude hr and manager
-        ->pluck('employee_id')
-        ->toArray();
+        // Step 3: Exclude users with user_type 'hr' or 'manager'
+        $nonHrManagerEmployeeIds = $superAddUser
+            ->whereNotIn('user_type', ['hr', 'manager']) // Exclude hr and manager
+            ->pluck('employee_id')
+            ->toArray();
 
-    // Step 4: Get only those evaluations for non-hr and non-manager users
-    $adminReviewTable = AdminReviewTable::whereIn('emp_id', $validEmployeeIds)->get();
-    $evaluation = evaluationTable::whereIn('emp_id', $nonHrManagerEmployeeIds)->get();
+        // Step 4: Get only those evaluations for non-hr and non-manager users
+        $adminReviewTable = AdminReviewTable::whereIn('emp_id', $validEmployeeIds)->get();
+        $evaluation = evaluationTable::whereIn('emp_id', $nonHrManagerEmployeeIds)->get();
 
-    // Step 5: Filter out HR and Manager users before sending to view
-    $superAddUser = $superAddUser->whereNotIn('user_type', ['hr', 'manager'])->values();
+        // Step 5: Filter out HR and Manager users before sending to view
+        $superAddUser = $superAddUser->whereNotIn('user_type', ['hr', 'manager'])->values();
 
-    // Return view
-    return view('reports.adminReportView', compact('superAddUser', 'adminReviewTable', 'evaluation'));
-}
+        // Return view
+        return view('reports.adminReportView', compact('superAddUser', 'adminReviewTable', 'evaluation'));
+    }
 
 
 
@@ -1109,34 +1108,34 @@ class allUserController extends Controller
     }
 
 
-//     public function getManagerReviewList(Request $request)
-// {
-//     // Step 1: Get all unique emp_ids from both tables
-//     $validEmployeeIds = ManagerReviewTable::pluck('emp_id')
-//         ->merge(evaluationTable::pluck('emp_id'))
-//         ->unique()
-//         ->toArray();
+    //     public function getManagerReviewList(Request $request)
+    // {
+    //     // Step 1: Get all unique emp_ids from both tables
+    //     $validEmployeeIds = ManagerReviewTable::pluck('emp_id')
+    //         ->merge(evaluationTable::pluck('emp_id'))
+    //         ->unique()
+    //         ->toArray();
 
-//     // Step 2: Get active SuperAddUser records for these IDs
-//     $superAddUser = SuperAddUser::where('status', 1)
-//         ->whereIn('employee_id', $validEmployeeIds)
-//         ->get();
+    //     // Step 2: Get active SuperAddUser records for these IDs
+    //     $superAddUser = SuperAddUser::where('status', 1)
+    //         ->whereIn('employee_id', $validEmployeeIds)
+    //         ->get();
 
-//     // Step 3: Exclude users with user_type 'admin' or 'hr'
-//     $nonAdminHrEmployeeIds = $superAddUser
-//         ->whereNotIn('user_type', ['admin', 'hr']) // Filter out admin and hr
-//         ->pluck('employee_id')
-//         ->toArray();
+    //     // Step 3: Exclude users with user_type 'admin' or 'hr'
+    //     $nonAdminHrEmployeeIds = $superAddUser
+    //         ->whereNotIn('user_type', ['admin', 'hr']) // Filter out admin and hr
+    //         ->pluck('employee_id')
+    //         ->toArray();
 
-//     // Step 4: Fetch only manager reviews and evaluations for the filtered users
-//     $managerReviewTable = ManagerReviewTable::whereIn('emp_id', $nonAdminHrEmployeeIds)->get();
-//     $evaluation = evaluationTable::whereIn('emp_id', $nonAdminHrEmployeeIds)->get();
+    //     // Step 4: Fetch only manager reviews and evaluations for the filtered users
+    //     $managerReviewTable = ManagerReviewTable::whereIn('emp_id', $nonAdminHrEmployeeIds)->get();
+    //     $evaluation = evaluationTable::whereIn('emp_id', $nonAdminHrEmployeeIds)->get();
 
-//     // Step 5: Filter users to exclude admin and hr before sending to view
-//     $superAddUser = $superAddUser->whereNotIn('user_type', ['admin', 'hr'])->values();
+    //     // Step 5: Filter users to exclude admin and hr before sending to view
+    //     $superAddUser = $superAddUser->whereNotIn('user_type', ['admin', 'hr'])->values();
 
-//     return view('reports.managerReportView', compact('superAddUser', 'managerReviewTable', 'evaluation'));
-// }
+    //     return view('reports.managerReportView', compact('superAddUser', 'managerReviewTable', 'evaluation'));
+    // }
 
 
 
@@ -1219,36 +1218,49 @@ class allUserController extends Controller
     //Handle User Review table in side User Review Report for Employee blade file
     public function getReviewScores(Request $request)
     {
-        $empId = session('employee_id');
-        $year = $request->query('financial_year');
+        // $empId = session('employee_id');
+    $empId = $request->input('emp_id') ?? $request->input('employee_id');
+    $year = $request->query('financial_year');
 
-        $financialData = FinancialData::where('emp_id', $empId)
-            ->where('financial_year', $year)
-            ->first();
+        $user = SuperAddUser::where('employee_id', $empId)->first();
+        $roles = json_decode($user?->user_roles ?? '[]', true);
+        $showClient = in_array('client', $roles);
+
         $evaluation = evaluationTable::where('emp_id', $empId)
             ->where('financial_year', $year)
             ->first();
 
+        $adminReview = AdminReviewTable::where('emp_id', $empId)
+            ->where('financial_year', $year)
+            ->first();
 
-        $user = SuperAddUser::where('employee_id', $empId)->first();
-        $roles = json_decode($user?->user_roles ?? '[]', true);
+        $hrReview = HrReviewTable::where('emp_id', $empId)
+            ->where('financial_year', $year)
+            ->first();
 
+        $managerReview = ManagerReviewTable::where('emp_id', $empId)
+            ->where('financial_year', $year)
+            ->first();
 
-        $showClient = in_array('client', $roles);
-
-        //After Finanacial Year Submmition Hr, Manager, Client should be vesible
+        $clientReview = null;
+        if ($showClient) {
+            $clientReview = ClientReviewTable::where('emp_id', $empId)
+                ->where('financial_year', $year)
+                ->first();
+        }
+       
         $response = [
-            'admin' => $financialData?->admin_review,
-            'hr' => $financialData?->hr_review,
-            'manager' => $financialData?->manager_review,
+            'admin' => $adminReview?->AdminTotalReview,
+            'hr' => $hrReview?->HrTotalReview,
+            'managerTotal' => $managerReview?->ManagerTotalReview,
             'total' => $evaluation?->total_scoring_system,
             'showClient' => $showClient,
         ];
 
 
-        if ($showClient) {
-            $response['client'] = $financialData?->client_review;
-        }
+       if ($showClient) {
+        $response['clientTotal'] = $clientReview?->ClientTotalReview;
+    }
 
 
         return response()->json($response);

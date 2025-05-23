@@ -6,17 +6,19 @@
 
 @section('page-title', 'Super Admin Dashboard') <!-- Page Title in Breadcrumb -->
 
+@section('body-class', 'special-page')
+
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- {{dd($users)}} --}}
     {{-- <div class="container"> --}}
-        <h2>Employee Review Details:{{$emp_id}}</h2>
+        <h2 class="heading">Employee Review Details:{{$emp_id}}</h2>
         <div class="mt-3">
-            <button onclick="history.back()" class="btn btn-secondary">← Back</button>
+            <button onclick="history.back()" class="btn btn-secondary">Back</button>
         </div>
-        <div class="col-12 col-sm-6 search-container">
-            <label for="financialYear">Financial Years:</label>
+        <div class="col-12 col-sm-6 search-container forms-block">
+            <label for="financialYear" class="forms-label">Financial Years:</label>
             <select id="employeeDetails" name="financial_year" required class="form-control">
                 <option value="" selected>Select Financial Years</option>
                 <option value="2025-2026">2025-2026</option>
@@ -58,41 +60,39 @@
 
         <div class="evaluation-report">
             @if(optional($users['evaluation'])->emp_id)
-                <button class="btn" onclick="loadReport('evaluation', '{{ $users['evaluation']->emp_id }}')">
+                <button class="btn secondary-btn" onclick="loadReport('evaluation', '{{ $users['evaluation']->emp_id }}')">
                     Evaluation Details
                 </button>
             @else
                 <p>Evaluation review is pending.</p>
             @endif
 
-
-            @if(optional($users['hrReview'])->emp_id)
-                <button class="btn" onclick="loadReport('hrReport', '{{ $users['hrReview']->emp_id }}')">
-                    View HR Review
-                </button>
-            @else
-                <p>HR review is pending.</p>
-            @endif
-
-
-            @if(optional($users['managerReview'])->emp_id)
-                <button class="btn" onclick="loadReport('managerReport', '{{ $users['managerReview']->emp_id }}')">
-                    View Manager Review
-                </button>
-            @else
-                <p>Manager review is pending.</p>
-            @endif
-
-            @if(optional($users['adminReview'])->emp_id)
-                <button class="btn" onclick="loadReport('adminReport', '{{ $users['adminReview']->emp_id }}')">
+             @if(optional($users['adminReview'])->emp_id)
+                <button class="btn secondary-btn" onclick="loadReport('adminReport', '{{ $users['adminReview']->emp_id }}')">
                     View Admin Review
                 </button>
             @else
                 <p>Admin review is pending.</p>
             @endif
 
+            @if(optional($users['hrReview'])->emp_id)
+                <button class="btn secondary-btn" onclick="loadReport('hrReport', '{{ $users['hrReview']->emp_id }}')">
+                    View HR Review
+                </button>
+            @else
+                <p>HR review is pending.</p>
+            @endif
+
+            @if(optional($users['managerReview'])->emp_id)
+                <button class="btn secondary-btn" onclick="loadReport('managerReport', '{{ $users['managerReview']->emp_id }}')">
+                    View Manager Review
+                </button>
+            @else
+                <p>Manager review is pending.</p>
+            @endif
+
             @if(optional($users['clientReview'])->emp_id)
-                <button class="btn" onclick="loadReport('clientReport', '{{ $users['clientReview']->emp_id }}')">
+                <button class="btn secondary-btn" onclick="loadReport('clientReport', '{{ $users['clientReview']->emp_id }}')">
                     View Client Review
                 </button>
             @elseif(in_array('client', $users))
@@ -104,7 +104,7 @@
 
 
         {{-- {{dd($users)}} --}}
-        <div id="reportDetails" style="margin-top: 20px;"></div>
+        <div id="reportDetails" class="" style=""></div>
         {{--
     </div> --}}
 
@@ -155,6 +155,7 @@
                     success: function (response) {
 
                         $('#reportDetails').html(response);
+                        $('#reportDetails').addClass('table-container');
                     },
                     error: function () {
                         $('#reportDetails').html('<p>Sorry, there was an error loading the report.</p>');
