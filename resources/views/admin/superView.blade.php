@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Super Admin Dashboard')
+@section('title', 'Employee Review')
 @section('breadcrumb', 'Super view')
 @section('page-title', 'Super Admin Dashboard')
 
@@ -32,7 +32,7 @@
         </div>
         <div class="container table-container super-view-page">
             <div class="table-responsive table-wrapper">
-                <table id="employeeDetails" class="table table-bordered table-hover main-table view-reviews-table">
+                <table id="employeeDetails" class="table table-bordered table-hover main-table table-view view-reviews-table table-view">
                     <thead>
                         <tr>
                             <th>Employee ID</th>

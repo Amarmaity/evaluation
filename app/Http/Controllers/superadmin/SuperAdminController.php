@@ -5,8 +5,10 @@ namespace App\Http\Controllers\superadmin;
 use App\Http\Controllers\Controller;
 use App\Mail\OtpMail;
 use App\Models\AdminReviewTable;
+use App\Models\AllClient;
 use App\Models\ApprisalTable;
 use App\Models\ClientReviewTable;
+use App\Models\ClientReviewTables;
 use App\Models\evaluationTable;
 use App\Models\FinancialData;
 use App\Models\HrReviewTable;
@@ -20,6 +22,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+
 
 
 
@@ -47,22 +51,6 @@ class SuperAdminController extends Controller
 
         $request = SuperUserTable::insert($data);
     }
-
-
-    // public function testEmail()
-    // {
-    //     $otp = rand(100000, 999999);  // Generate a random OTP for testing
-
-    //     try {
-    //         // Sending the email
-    //         Mail::to('amar.maity@delostylestudio.com')->send(new OtpMail($otp));
-    //         return 'Test email sent!';
-    //     } catch (\Exception $e) {
-    //         return 'Failed to send email: ' . $e->getMessage();
-    //     }
-    // }    
-
-
 
     public function loginAutenticacao(Request $request)
     {
@@ -321,201 +309,6 @@ class SuperAdminController extends Controller
     }
 
 
-    // public function getAppraisalData(Request $request)
-    // {
-    //     $employeeId = trim($request->query('employee_id', ''));
-    //     $employeeName = trim($request->query('employee_name', ''));
-    //     $financialYear = trim($request->query('financial_year', ''));
-    //     $financialYear = str_replace('/', '-', $financialYear);
-
-    //     // dd($financialYear);
-
-    //     // Validate the financial year format
-    //     if ($financialYear && preg_match('/(\d{4})-(\d{4})/', $financialYear, $matches)) {
-    //         $startDate = "{$matches[1]}-04-01";
-    //         $endDate = "{$matches[2]}-03-31";
-    //     } else {
-    //         return response()->json(['status' => 'error', 'message' => 'Invalid or missing financial year'], 400);
-    //     }
-
-    //     // Validate the presence of employee ID or name
-    //     if (empty($employeeId) && empty($employeeName)) {
-    //         return response()->json(['error' => 'Employee ID or Name is required'], 400);
-    //     }
-
-    //     // Build query to find the employee
-    //     $query = SuperAddUser::query();
-
-    //     if (!empty($employeeId)) {
-    //         $query->whereRaw("LOWER(TRIM(employee_id)) LIKE LOWER(?)", ["%{$employeeId}%"]);
-    //     }
-
-    //     if (!empty($employeeName)) {
-    //         $query->where(function ($q) use ($employeeName) {
-    //             $q->whereRaw("LOWER(TRIM(fname)) LIKE LOWER(?)", ["%{$employeeName}%"])
-    //                 ->orWhereRaw("LOWER(TRIM(lname)) LIKE LOWER(?)", ["%{$employeeName}%"])
-    //                 ->orWhereRaw("LOWER(CONCAT(TRIM(fname), ' ', TRIM(lname))) LIKE LOWER(?)", ["%{$employeeName}%"]);
-    //         });
-    //     }
-
-    //     // Fetch the employee data
-    //     $employee = $query->first();
-
-    //     if (!$employee) {
-    //         Log::error("Employee not found with employee_id: $employeeId");
-    //         return response()->json(['status' => 'error', 'message' => 'No employee found.'], 404);
-    //     }
-
-    //     $employeeIdentifier = $employee->emp_id ?? $employee->employee_id;
-
-    //     // Check if the employee has data for the selected financial year
-    //     $hasData = SuperAddUser::where('employee_id', $employeeIdentifier)
-    //         ->where('financial_year', $financialYear)
-    //         ->exists();
-
-    //     if (!$hasData) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'No appraisal data found for the selected financial year.'
-    //         ], 404);
-    //     }
-
-    //     // Fetch salary details
-    //     $salary = $employee->salary ?? 0;
-    //     $companyIncrementPercent = 20;
-    //     $incrementAmount = ($salary * $companyIncrementPercent) / 100;
-
-    //     // Fetch the review data from different tables
-    //     $adminReviewData = AdminReviewTable::join('super_add_users', function ($join) use ($financialYear) {
-    //         $join->on('admin_review_tables.emp_id', '=', 'super_add_users.employee_id')
-    //             ->where('admin_review_tables.financial_year', '=', $financialYear);
-    //     })
-    //         ->where('super_add_users.financial_year', $financialYear)
-    //         ->where('super_add_users.employee_id', $employeeIdentifier)
-    //         ->pluck('AdminTotalReview')
-    //         ->toArray();
-
-    //     // evalluation score
-    //     $evaluationScore = evaluationTable::join('super_add_users', function ($join) use ($financialYear) {
-    //         $join->on('evaluation_tables.emp_id', '=', 'super_add_users.employee_id')
-    //             ->where('evaluation_tables.financial_year', '=', $financialYear);
-    //     })
-    //         ->where('super_add_users.financial_year', $financialYear)
-    //         ->where('super_add_users.employee_id', $employeeIdentifier)
-    //         ->pluck('total_scoring_system')
-    //         ->toArray();
-
-    //     $hrReviewData = HrReviewTable::join('super_add_users', function ($join) use ($financialYear) {
-    //         $join->on('hr_review_tables.emp_id', '=', 'super_add_users.employee_id')
-    //             ->where('hr_review_tables.financial_year', '=', $financialYear);
-    //     })
-    //         ->where('super_add_users.financial_year', $financialYear)
-    //         ->where('super_add_users.employee_id', $employeeIdentifier)
-    //         ->pluck('HrTotalReview')
-    //         ->toArray();
-
-    //     $managerReviewData = ManagerReviewTable::join('super_add_users', function ($join) use ($financialYear) {
-    //         $join->on('manager_review_tables.emp_id', '=', 'super_add_users.employee_id')
-    //             ->where('manager_review_tables.financial_year', '=', $financialYear);
-    //     })
-    //         ->where('super_add_users.financial_year', $financialYear)
-    //         ->where('super_add_users.employee_id', $employeeIdentifier)
-    //         ->pluck('ManagerTotalReview')
-    //         ->toArray();
-
-    //     $clientReviewData = ClientReviewTable::join('super_add_users', function ($join) use ($financialYear) {
-    //         $join->on('client_review_tables.emp_id', '=', 'super_add_users.employee_id')
-    //             ->where('client_review_tables.financial_year', '=', $financialYear);
-    //     })
-    //         ->where('super_add_users.financial_year', $financialYear)
-    //         ->where('super_add_users.employee_id', $employeeIdentifier)
-    //         ->pluck('ClientTotalReview')
-    //         ->toArray();
-
-    //     // Check if the employee has a client
-    //     $hasClient = !empty($employee->client_id); // Modify based on how you store client data
-
-
-    //     // Map the review data with proper values
-    //     $adminReviewData = !empty($adminReviewData) ?
-    //         array_map(fn($score) => $score > 0 ? min(($score / 45) * 100, 100) : 'Pending', $adminReviewData)
-    //         : ['Pending'];
-
-    //     $hrReviewData = !empty($hrReviewData) ?
-    //         array_map(fn($score) => $score > 0 ? min(($score / 30) * 100, 100) : 'Pending', $hrReviewData)
-    //         : ['Pending'];
-
-    //     $managerReviewData = !empty($managerReviewData) ?
-    //         array_map(fn($score) => $score > 0 ? min(($score / 35) * 100, 100) : 'Pending', $managerReviewData)
-    //         : ['Pending'];
-
-    //     // Prepare the review arrays for response
-    //     $reviewArrays = [
-    //         'admin' => $adminReviewData,
-    //         'hr' => $hrReviewData,
-    //         'manager' => $managerReviewData,
-    //     ];
-
-
-
-    //     // Always handle the client review if the employee has a client
-    //     $hasClient = false;
-    //     $userRoles = json_decode($employee->user_roles, true);
-
-    //     if (is_array($userRoles) && in_array('client', $userRoles)) {
-    //         $hasClient = true;
-
-    //         $clientReviewData = !empty($clientReviewData)
-    //             ? array_map(fn($score) => $score > 0 ? min(($score / 100) * 100, 100) : 'Pending', $clientReviewData)
-    //             : ['Pending'];
-
-    //         $reviewArrays['client'] = $clientReviewData;
-    //     }
-
-    //     // dd($clientReviewData);
-
-    //     $finalSalaries = [];
-    //     $reviewCount = 1;
-
-    //     for ($i = 0; $i < $reviewCount; $i++) {
-    //         $scores = [];
-
-    //         foreach ($reviewArrays as $reviews) {
-    //             if (isset($reviews[$i]) && is_numeric($reviews[$i])) {
-    //                 $scores[] = $reviews[$i];
-    //             }
-    //         }
-
-    //         $avgScore = count($scores) > 0 ? array_sum($scores) / count($scores) : 0;
-    //         $appraisalAmount = ($incrementAmount * $avgScore) / 100;
-    //         $finalSalary = round($salary + $appraisalAmount, 2);
-    //         $finalSalaries[] = $finalSalary;
-    //     }
-
-    //     // Return the response
-    //     return response()->json([
-    //         'employee_name' => "{$employee->fname} {$employee->lname}",
-    //         'adminReviewData' => $adminReviewData,
-    //         'hrReviewData' => $hrReviewData,
-    //         'managerReviewData' => $managerReviewData,
-    //         'clientReviewData' => $hasClient ? ($clientReviewData ?? ['Pending']) : [],
-    //         'evaluationScore' => $evaluationScore,
-    //         'salary' => $salary,
-    //         'incrementAmount' => $incrementAmount,
-    //         'finalSalaries' => $finalSalaries,
-    //         'showClientColumn' => $hasClient, // This flag will help to display the client column
-    //         'status' => 'success'
-    //     ]);
-    // }
-
-
-
-
-
-
-
-
-
 
     public function getAppraisalData(Request $request)
     {
@@ -523,7 +316,6 @@ class SuperAdminController extends Controller
         $financialYear = trim($request->query('financial_year', ''));
         $financialYear = str_replace('/', '-', $financialYear);
 
-        // Validate financial year format
         if ($financialYear && preg_match('/(\d{4})-(\d{4})/', $financialYear, $matches)) {
             $startDate = "{$matches[1]}-04-01";
             $endDate = "{$matches[2]}-03-31";
@@ -531,15 +323,13 @@ class SuperAdminController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Invalid or missing financial year'], 400);
         }
 
-        // Validate employee input
         if (empty($employeeQuery)) {
             return response()->json(['error' => 'Employee ID or Name is required'], 400);
         }
 
-        // Build query
         $query = SuperAddUser::query();
         $query->where(function ($q) use ($employeeQuery) {
-            $q->whereRaw("LOWER(TRIM(employee_id)) LIKE LOWER(?)", ["%{$employeeQuery}%"])
+            $q->orWhere('employee_id', $employeeQuery)
                 ->orWhereRaw("LOWER(TRIM(fname)) LIKE LOWER(?)", ["%{$employeeQuery}%"])
                 ->orWhereRaw("LOWER(TRIM(lname)) LIKE LOWER(?)", ["%{$employeeQuery}%"])
                 ->orWhereRaw("LOWER(CONCAT(TRIM(fname), ' ', TRIM(lname))) LIKE LOWER(?)", ["%{$employeeQuery}%"]);
@@ -565,101 +355,87 @@ class SuperAdminController extends Controller
             ], 404);
         }
 
-        $salary = $employee->salary ?? 0;
-        $companyIncrementPercent = 20;
-        $incrementAmount = ($salary * $companyIncrementPercent) / 100;
-
-        // Reviews
-        $adminReviewData = AdminReviewTable::join('super_add_users', function ($join) use ($financialYear) {
-            $join->on('admin_review_tables.emp_id', '=', 'super_add_users.employee_id')
-                ->where('admin_review_tables.financial_year', '=', $financialYear);
-        })
-            ->where('super_add_users.financial_year', $financialYear)
-            ->where('super_add_users.employee_id', $employeeIdentifier)
+        $adminReviewData = AdminReviewTable::where('emp_id', $employeeIdentifier)
+            ->where('financial_year', $financialYear)
             ->pluck('AdminTotalReview')
+            ->map(fn($score) => $score > 0 ? min(($score / 45) * 100, 100) : null)
+            ->filter()
             ->toArray();
 
-        $evaluationScore = evaluationTable::join('super_add_users', function ($join) use ($financialYear) {
-            $join->on('evaluation_tables.emp_id', '=', 'super_add_users.employee_id')
-                ->where('evaluation_tables.financial_year', '=', $financialYear);
-        })
-            ->where('super_add_users.financial_year', $financialYear)
-            ->where('super_add_users.employee_id', $employeeIdentifier)
-            ->pluck('total_scoring_system')
-            ->toArray();
-
-        $hrReviewData = HrReviewTable::join('super_add_users', function ($join) use ($financialYear) {
-            $join->on('hr_review_tables.emp_id', '=', 'super_add_users.employee_id')
-                ->where('hr_review_tables.financial_year', '=', $financialYear);
-        })
-            ->where('super_add_users.financial_year', $financialYear)
-            ->where('super_add_users.employee_id', $employeeIdentifier)
+        $hrReviewData = HrReviewTable::where('emp_id', $employeeIdentifier)
+            ->where('financial_year', $financialYear)
             ->pluck('HrTotalReview')
+            ->map(fn($score) => $score > 0 ? min(($score / 30) * 100, 100) : null)
+            ->filter()
             ->toArray();
 
-        $managerReviewData = ManagerReviewTable::join('super_add_users', function ($join) use ($financialYear) {
-            $join->on('manager_review_tables.emp_id', '=', 'super_add_users.employee_id')
-                ->where('manager_review_tables.financial_year', '=', $financialYear);
-        })
-            ->where('super_add_users.financial_year', $financialYear)
-            ->where('super_add_users.employee_id', $employeeIdentifier)
+        $managerReviewData = ManagerReviewTable::where('emp_id', $employeeIdentifier)
+            ->where('financial_year', $financialYear)
             ->pluck('ManagerTotalReview')
+            ->map(fn($score) => $score > 0 ? min(($score / 35) * 100, 100) : null)
+            ->filter()
             ->toArray();
 
-        $clientReviewData = ClientReviewTable::join('super_add_users', function ($join) use ($financialYear) {
-            $join->on('client_review_tables.emp_id', '=', 'super_add_users.employee_id')
-                ->where('client_review_tables.financial_year', '=', $financialYear);
-        })
-            ->where('super_add_users.financial_year', $financialYear)
-            ->where('super_add_users.employee_id', $employeeIdentifier)
-            ->pluck('ClientTotalReview')
+        $evaluationScore = evaluationTable::where('emp_id', $employeeIdentifier)
+            ->where('financial_year', $financialYear)
+            ->pluck('total_scoring_system')
+            ->map(fn($score) => $score > 0 ? min(($score / 100) * 100, 100) : null)
+            ->filter()
             ->toArray();
 
-        // Map review scores
-        $adminReviewData = !empty($adminReviewData) ?
-            array_map(fn($score) => $score > 0 ? min(($score / 45) * 100, 100) : 'Pending', $adminReviewData)
-            : ['Pending'];
-
-        $hrReviewData = !empty($hrReviewData) ?
-            array_map(fn($score) => $score > 0 ? min(($score / 30) * 100, 100) : 'Pending', $hrReviewData)
-            : ['Pending'];
-
-        $managerReviewData = !empty($managerReviewData) ?
-            array_map(fn($score) => $score > 0 ? min(($score / 35) * 100, 100) : 'Pending', $managerReviewData)
-            : ['Pending'];
-
-        $reviewArrays = [
-            'admin' => $adminReviewData,
-            'hr' => $hrReviewData,
-            'manager' => $managerReviewData,
-        ];
-
-        // Client review
-        $hasClient = false;
+        // Optional: Client Review
+        $clientReviewData = [];
         $userRoles = json_decode($employee->user_roles, true);
+        $hasClient = is_array($userRoles) && in_array('client', $userRoles);
 
-        if (is_array($userRoles) && in_array('client', $userRoles)) {
-            $hasClient = true;
-            $clientReviewData = !empty($clientReviewData)
-                ? array_map(fn($score) => $score > 0 ? min(($score / 100) * 100, 100) : 'Pending', $clientReviewData)
-                : ['Pending'];
-            $reviewArrays['client'] = $clientReviewData;
-        }
+        if ($hasClient) {
+            $clientReviews = ClientReviewTable::where('emp_id', $employeeIdentifier)
+                ->where('financial_year', $financialYear)
+                ->get();
 
-        $finalSalaries = [];
-        $reviewCount = 1;
+            if ($clientReviews->isNotEmpty()) {
+                $clientScores = [];
 
-        for ($i = 0; $i < $reviewCount; $i++) {
-            $scores = [];
-            foreach ($reviewArrays as $reviews) {
-                if (isset($reviews[$i]) && is_numeric($reviews[$i])) {
-                    $scores[] = $reviews[$i];
+                foreach ($clientReviews as $review) {
+                    $clientScores[$review->client_id][] = $review->ClientTotalReview;
+                }
+
+                $averagedClientScores = array_map(function ($scores) {
+                    $valid = array_filter($scores, fn($s) => is_numeric($s) && $s > 0);
+                    return count($valid) ? array_sum($valid) / count($valid) : null;
+                }, $clientScores);
+
+                $validClientScores = array_filter($averagedClientScores, fn($s) => is_numeric($s));
+                $clientAverage = count($validClientScores) ? round(array_sum($validClientScores) / count($validClientScores), 2) : null;
+
+                if (is_numeric($clientAverage)) {
+                    $clientReviewData[] = min(($clientAverage / 100) * 100, 100);
                 }
             }
-            $avgScore = count($scores) > 0 ? array_sum($scores) / count($scores) : 0;
-            $appraisalAmount = ($incrementAmount * $avgScore) / 100;
-            $finalSalary = round($salary + $appraisalAmount, 2);
-            $finalSalaries[] = $finalSalary;
+        }
+
+        // Average all component scores
+        $eval = count($evaluationScore) ? array_sum($evaluationScore) / count($evaluationScore) : null;
+        $admin = count($adminReviewData) ? array_sum($adminReviewData) / count($adminReviewData) : null;
+        $hr = count($hrReviewData) ? array_sum($hrReviewData) / count($hrReviewData) : null;
+        $manager = count($managerReviewData) ? array_sum($managerReviewData) / count($managerReviewData) : null;
+        $client = count($clientReviewData) ? array_sum($clientReviewData) / count($clientReviewData) : null;
+
+        $userType = strtolower($employee->user_type ?? 'user');
+        $appraisalScore = 'Pending';
+
+        if ($userType === 'admin' && is_numeric($eval) && is_numeric($hr)) {
+            $appraisalScore = round(($eval + $hr) / 2, 2);
+        } elseif ($userType === 'hr' && is_numeric($eval) && is_numeric($admin)) {
+            $appraisalScore = round(($eval + $admin) / 2, 2);
+        } elseif ($userType === 'manager' && is_numeric($eval) && is_numeric($admin) && is_numeric($hr)) {
+            $appraisalScore = round(($eval + $admin + $hr) / 3, 2);
+        } elseif ($userType === 'user' && is_numeric($eval) && is_numeric($admin) && is_numeric($hr) && is_numeric($manager)) {
+            if (is_numeric($client)) {
+                $appraisalScore = round(($eval + $admin + $hr + $manager + $client) / 5, 2);
+            } else {
+                $appraisalScore = round(($eval + $admin + $hr + $manager) / 4, 2);
+            }
         }
 
         return response()->json([
@@ -669,142 +445,36 @@ class SuperAdminController extends Controller
             'managerReviewData' => $managerReviewData,
             'clientReviewData' => $hasClient ? ($clientReviewData ?? ['Pending']) : [],
             'evaluationScore' => $evaluationScore,
-            'salary' => $salary,
-            'incrementAmount' => $incrementAmount,
-            'finalSalaries' => $finalSalaries,
             'showClientColumn' => $hasClient,
-            'status' => 'success'
+            'appraisal_score' => $appraisalScore,
+            'status' => 'success',
+            'showEvaluation' => !empty($evaluationScore),
+            'showAdmin' => !empty($adminReviewData),
+            'showHR' => !empty($hrReviewData),
+            'showManager' => !empty($managerReviewData),
+            'showClient' => $hasClient && !empty($clientReviewData),
         ]);
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //Financial Year DropDown Handle In Appraisal Page
-
-    // public function validateFinancialYear(Request $request)
-    // {
-    //     $financialYear = trim($request->query('financial_year', ''));
-
-    //     // Parse the financial year and determine the start and end date
-    //     if ($financialYear && preg_match('/(\d{4})\/(\d{4})/', $financialYear, $matches)) {
-    //         $startDate = "{$matches[1]}-04-01";
-    //         $endDate = "{$matches[2]}-03-31";
-    //     } else {
-    //         return response()->json(['status' => 'error', 'message' => 'Invalid financial year format.'], 400);
-    //     }
-
-    //     // Check if the financial year exists in each required table
-    //     $superAddUserExists = SuperAddUser::where('financial_year', $financialYear)->exists();
-    //     $managerReviewExists = ManagerReviewTable::where('financial_year', $financialYear)->exists();
-    //     $hrReviewExists = HrReviewTable::where('financial_year', $financialYear)->exists();
-    //     $clientReviewExists = ClientReviewTable::where('financial_year', $financialYear)->exists();
-    //     $adminReviewExists = AdminReviewTable::where('financial_year', $financialYear)->exists();
-
-    //     // If any of the tables does not have data for the selected financial year
-    //     if (!$superAddUserExists || !$managerReviewExists || !$hrReviewExists || !$clientReviewExists || !$adminReviewExists) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'Data mismatch: The selected financial year does not have data in all required tables.'
-    //         ], 400);
-    //     }
-
-    //     // If everything is fine
-    //     return response()->json(['status' => 'success']);
-    // }
-
-
-
-    //Action Column
-    // public function toggleStatus($id)
-    // {
-
-    //     $user = SuperAddUser::where('employee_id', $id)->first();
-
-    //     if (!$user) {
-    //         Log::error("User not found: ID $id");
-    //         return response()->json(['success' => false, 'error' => 'User not found'], 404);
-    //     }
-
-    //     // Toggle status
-    //     // $user->status = !$user->status;
-    //     // $user->save();
-    //     $user->status = $user->status == 1 ? 0 : 1;
-    //     $user->save();
-
-    //     Log::info("User status updated", [
-    //         'user_id' => $id,
-    //         'new_status' => $user->status
-    //     ]);
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'new_status' => $user->status
-    //     ]);
-    // }
-
-
     public function toggleStatus($user_type, $identifier)
     {
-        if ($user_type === 'client') {
-            // For clients, find by 'id' since no employee_id
-            $user = SuperAddUser::where('user_type', 'client')->where('id', $identifier)->first();
-        } else {
-            // For others, find by employee_id
-            $user = SuperAddUser::where('user_type', $user_type)->where('employee_id', $identifier)->first();
-        }
+        $user = $user_type === 'client'
+            ? SuperAddUser::where('user_type', 'client')->where('id', $identifier)->first()
+            : SuperAddUser::where('user_type', $user_type)->where('employee_id', $identifier)->first();
 
         if (!$user) {
-            Log::error("User not found: Type $user_type, Identifier $identifier");
             return response()->json(['success' => false, 'error' => 'User not found'], 404);
         }
 
-        // Toggle status
-        $user->status = $user->status == 1 ? 0 : 1;
+        $user->status = $user->status ? 0 : 1;
         $user->save();
-
-        Log::info("User status updated", [
-            'user_type' => $user_type,
-            'identifier' => $identifier,
-            'new_status' => $user->status
-        ]);
 
         return response()->json([
             'success' => true,
             'new_status' => $user->status
         ]);
     }
-
 
 
     public function getActiveUsers()
@@ -863,71 +533,42 @@ class SuperAdminController extends Controller
         return view('admin.financial');
     }
 
-
     public function getFinancialData(Request $request)
     {
         try {
-            // Get and sanitize inputs
             $searchInput = strtolower(trim($request->input('search')));
             $financialYear = trim($request->query('financial_year', ''));
 
             Log::info("Searching employee:", ['input' => $searchInput]);
 
             $employee = SuperAddUser::where(function ($query) use ($searchInput) {
-                $searchInput = strtolower($searchInput);
-                $query->whereRaw("LOWER(employee_id) LIKE ?", ["%{$searchInput}%"])
-                    ->orWhereRaw("LOWER(CONCAT(fname, ' ', lname)) LIKE ?", ["%{$searchInput}%"]);
+                $query->whereRaw("LOWER(employee_id) = ?", [$searchInput])
+                    ->orWhereRaw("LOWER(CONCAT(TRIM(fname), ' ', TRIM(lname))) LIKE ?", ["%$searchInput%"]);
             })->first();
 
             if (!$employee) {
                 return response()->json(['status' => 'error', 'message' => 'No employee found.'], 404);
             }
-            // dd($employee);
 
             $employeeIdentifier = $employee->emp_id ?? $employee->employee_id;
+            $userType = strtolower($employee->user_type);
 
-            // Check if any appraisal/review data exists for the employee for this financial year
-            $hasData =
+            // Client Review
+            $clientReviewDetails = ClientReviewTable::join('all_clients', 'client_review_tables.client_id', '=', 'all_clients.id')
+                ->where('client_review_tables.emp_id', $employeeIdentifier)
+                ->where('client_review_tables.financial_year', $financialYear)
+                ->select('client_review_tables.client_id', DB::raw('AVG(client_review_tables.ClientTotalReview) as avg_score'))
+                ->groupBy('client_review_tables.client_id')
+                ->get();
 
-                evaluationTable::join('super_add_users', function ($join) use ($financialYear) {
-                    $join->on('evaluation_tables.emp_id', '=', 'super_add_users.employee_id')
-                        ->where('evaluation_tables.financial_year', '=', $financialYear);
-                })
-                ->where('super_add_users.financial_year', $financialYear)
-                ->where('super_add_users.employee_id', $employeeIdentifier)
-                ->exists() ||
+            $hasClientReview = $clientReviewDetails->isNotEmpty();
 
-                AdminReviewTable::join('super_add_users', function ($join) use ($financialYear) {
-                    $join->on('admin_review_tables.emp_id', '=', 'super_add_users.employee_id')
-                        ->where('admin_review_tables.financial_year', '=', $financialYear);
-                })
-                ->where('super_add_users.financial_year', $financialYear)
-                ->where('super_add_users.employee_id', $employeeIdentifier)
-                ->exists() ||
-
-                HrReviewTable::join('super_add_users', function ($join) use ($financialYear) {
-                    $join->on('hr_review_tables.emp_id', '=', 'super_add_users.employee_id')
-                        ->where('hr_review_tables.financial_year', '=', $financialYear);
-                })
-                ->where('super_add_users.financial_year', $financialYear)
-                ->where('super_add_users.employee_id', $employeeIdentifier)
-                ->exists() ||
-
-                ManagerReviewTable::join('super_add_users', function ($join) use ($financialYear) {
-                    $join->on('manager_review_tables.emp_id', '=', 'super_add_users.employee_id')
-                        ->where('manager_review_tables.financial_year', '=', $financialYear);
-                })
-                ->where('super_add_users.financial_year', $financialYear)
-                ->where('super_add_users.employee_id', $employeeIdentifier)
-                ->exists() ||
-
-                ClientReviewTable::join('super_add_users', function ($join) use ($financialYear) {
-                    $join->on('client_review_tables.emp_id', '=', 'super_add_users.employee_id')
-                        ->where('client_review_tables.financial_year', '=', $financialYear);
-                })
-                ->where('super_add_users.financial_year', $financialYear)
-                ->where('super_add_users.employee_id', $employeeIdentifier)
-                ->exists();
+            // Check if any appraisal data exists
+            $hasData = evaluationTable::where('emp_id', $employeeIdentifier)->where('financial_year', $financialYear)->exists() ||
+                AdminReviewTable::where('emp_id', $employeeIdentifier)->where('financial_year', $financialYear)->exists() ||
+                HrReviewTable::where('emp_id', $employeeIdentifier)->where('financial_year', $financialYear)->exists() ||
+                ManagerReviewTable::where('emp_id', $employeeIdentifier)->where('financial_year', $financialYear)->exists() ||
+                $hasClientReview;
 
             if (!$hasData) {
                 return response()->json([
@@ -936,54 +577,31 @@ class SuperAdminController extends Controller
                 ], 404);
             }
 
-            // Fetch review scores from different tables
-            $adminReviewScores = AdminReviewTable::where('emp_id', $employeeIdentifier)
+            // Review scores
+            $adminReviewData = AdminReviewTable::where('emp_id', $employeeIdentifier)
                 ->where('financial_year', $financialYear)
                 ->pluck('AdminTotalReview')
+                ->map(fn($score) => min(($score / 45) * 100, 100))
                 ->toArray();
 
-            $hrReviewScores = HrReviewTable::where('emp_id', $employeeIdentifier)
+            $hrReviewData = HrReviewTable::where('emp_id', $employeeIdentifier)
                 ->where('financial_year', $financialYear)
                 ->pluck('HrTotalReview')
+                ->map(fn($score) => min(($score / 30) * 100, 100))
                 ->toArray();
 
             $managerReviewScores = ManagerReviewTable::where('emp_id', $employeeIdentifier)
                 ->where('financial_year', $financialYear)
-                ->pluck('ManagerTotalReview')
-                ->toArray();
+                ->pluck('ManagerTotalReview');
 
-            $total_scoring_system = evaluationTable::where('emp_id', $employeeIdentifier)
-                ->where('financial_year', $financialYear)
-                ->pluck('total_scoring_system')
-                ->toArray();
+            $avgManagerReview = $managerReviewScores->isNotEmpty()
+                ? round(min(($managerReviewScores->avg() / 35) * 100, 100), 2)
+                : 0;
 
-            // Decode user roles to check for client role
-            $userRoles = json_decode($employee->user_roles, true);
-            $hasClientRole = is_array($userRoles) && in_array('client', $userRoles);
+            $clientReviewData = $hasClientReview
+                ? round($clientReviewDetails->avg('avg_score'), 2)
+                : 0;
 
-            $clientReviewScores = [];
-            if ($hasClientRole) {
-                $clientReviewScores = ClientReviewTable::where('emp_id', $employeeIdentifier)
-                    ->where('financial_year', $financialYear)
-                    ->pluck('ClientTotalReview')
-                    ->toArray();
-            }
-
-            // Normalize scores to percentage scale
-            $adminReviewData = array_map(fn($score) => min(($score / 45) * 100, 100), $adminReviewScores);
-            $hrReviewData = array_map(fn($score) => min(($score / 30) * 100, 100), $hrReviewScores);
-            $managerReviewData = array_map(fn($score) => min(($score / 35) * 100, 100), $managerReviewScores);
-            $clientReviewData = $hasClientRole
-                ? (!empty($clientReviewScores) ? array_map(fn($score) => min(($score / 100) * 100, 100), $clientReviewScores) : [0])
-                : [];
-
-            // Merge all review scores including total scoring system
-            $totalReviewScores = array_merge($adminReviewData, $hrReviewData, $managerReviewData, $clientReviewData, $total_scoring_system);
-
-            // Calculate average percentage; fallback if no scores present
-            $avgReviewPercentage = !empty($totalReviewScores) ? array_sum($totalReviewScores) / count($totalReviewScores) : 0;
-
-            // Actually fetch total_scoring_system from evaluation table as main evaluation score
             $avgReviewPercentage = evaluationTable::where('emp_id', $employeeIdentifier)
                 ->where('financial_year', $financialYear)
                 ->value('total_scoring_system');
@@ -995,44 +613,56 @@ class SuperAdminController extends Controller
                 ], 404);
             }
 
-            // Determine previous financial year to get base salary
-
-
+            // Previous Year Base Salary
             if (preg_match('/(\d{4})-(\d{4})/', $financialYear, $matches)) {
                 $previousFinancialYear = ($matches[1] - 1) . '-' . $matches[1];
             } else {
-                // fallback or return error if financialYear is invalid
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Invalid financial year format.'
                 ], 400);
             }
 
-
-            $previousFinancialYear = ($matches[1] - 1) . '-' . $matches[1];
             $previousAppraisal = FinancialData::where('emp_id', $employeeIdentifier)
                 ->where('financial_year', $previousFinancialYear)
                 ->orderByDesc('apprisal_date')
                 ->first();
 
-            // Base salary fallback to employee salary if no previous appraisal
-            $baseSalary = $previousAppraisal ? (float) $previousAppraisal->final_salary : (float) $employee->salary;
+            $baseSalary = ($previousAppraisal && is_numeric($previousAppraisal->final_salary))
+                ? (float) $previousAppraisal->final_salary
+                : (float) $employee->salary;
 
             $companyPercentage = (float) $employee->company_percentage;
 
-            // Calculate salary increments and final salary
-            $updatedSalary = ($baseSalary * ($companyPercentage / 100));
-            $appraisalAmount = $updatedSalary * ($avgReviewPercentage / 100);
-            $finalSalary = $baseSalary + $updatedSalary + $appraisalAmount;
+            // Compute averages
+            $adminAvg = !empty($adminReviewData) ? array_sum($adminReviewData) / count($adminReviewData) : 0;
+            $hrAvg = !empty($hrReviewData) ? array_sum($hrReviewData) / count($hrReviewData) : 0;
+            $evaluationScore = (float) $avgReviewPercentage;
+            $managerAvg = $avgManagerReview;
+            $clientAvg = $clientReviewData;
 
-            // Round final salary (implement this method as you see fit)
-            $finalSalary = $this->roundSalary($finalSalary);
+            // Determine final review score
+            if ($hasClientReview) {
+                $finalReviewScore = ($evaluationScore + $adminAvg + $hrAvg + $managerAvg + $clientAvg) / 5;
+            } elseif ($userType === 'manager') {
+                $finalReviewScore = ($evaluationScore + $adminAvg + $hrAvg) / 3;
+            } elseif ($userType === 'admin') {
+                $finalReviewScore = ($evaluationScore + $hrAvg) / 2;
+            } elseif ($userType === 'hr') {
+                $finalReviewScore = ($evaluationScore + $adminAvg) / 2;
+            } else {
+                // Default: user or unknown
+                $finalReviewScore = ($evaluationScore + $adminAvg + $hrAvg + $managerAvg) / 4;
+            }
 
-            // Update employee final salary and check if saved
+            // Salary calculations
+            $updatedSalary = (int) $baseSalary * ($companyPercentage / 100);
+            $appraisalAmount = (int) $updatedSalary * ($finalReviewScore / 100);
+            $finalSalary = (int) $this->roundSalary($baseSalary + $updatedSalary + $appraisalAmount);
+
             $employee->update(['final_salary' => $finalSalary]);
             $isAlreadySaved = $employee->final_salary == $finalSalary;
 
-            // Check if already appraised this year
             $alreadyAppraised = FinancialData::where('emp_id', $employeeIdentifier)
                 ->whereYear('apprisal_date', now()->year)
                 ->exists();
@@ -1043,23 +673,24 @@ class SuperAdminController extends Controller
                 'evaluationScore'     => $avgReviewPercentage,
                 'hrReviewData'        => $hrReviewData,
                 'adminReviewData'     => $adminReviewData,
-                'managerReviewData'   => $managerReviewData,
+                'managerReviewData'   => $avgManagerReview,
                 'clientReviewData'    => $clientReviewData,
-                'salary'              => $baseSalary,
+                'salary'              => (int) $baseSalary,
                 'company_percentage'  => $companyPercentage,
-                'updatedSalary'       => $updatedSalary,
-                'appraisalAmount'     => $appraisalAmount,
-                'finalSalary'         => $finalSalary,
+                'updatedSalary'       => (int) $updatedSalary,
+                'appraisalAmount'     => (int) $appraisalAmount,
+                'finalSalary'         => (int) $finalSalary,
                 'appraisalDate'       => now()->toDateString(),
                 'isAlreadySaved'      => $isAlreadySaved,
-                'alreadyAppraised'    => $alreadyAppraised
+                'alreadyAppraised'    => $alreadyAppraised,
+                'appraisalScore'      => round($finalReviewScore, 2),
+                'user_type' =>  $userType
             ]);
         } catch (\Exception $e) {
             Log::error("Error fetching financial data:", ['error' => $e->getMessage()]);
             return response()->json(['status' => 'error', 'message' => 'Internal Server Error'], 500);
         }
     }
-
 
 
     private function roundSalary($amount)
@@ -1071,29 +702,40 @@ class SuperAdminController extends Controller
 
     public function userListView()
     {
-
         $currentDate = Carbon::now()->toDateString();
 
-
-        $users = SuperAddUser::where('probation_date', '<=', $currentDate)->orWhere('designation', 'Client')->get();
-
-        // $users = SuperAddUser::whereDate('probation_date', '<=', $currentDate)->get();
+        $users = SuperAddUser::where('probation_date', '<=', $currentDate)
+            ->orWhere('designation', 'Client')
+            ->orderByRaw("CASE WHEN probation_date = ? THEN 0 ELSE 1 END", [$currentDate])
+            ->orderBy('probation_date', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('admin.userList', compact('users'));
     }
 
 
-
-
     public function viewDetailsAll($emp_id)
     {
+
+        // Fetch client reviews with client names
+        $clientReviews = DB::table('client_review_tables')
+            ->join('all_clients', 'client_review_tables.client_id', '=', 'all_clients.id')
+            ->where('client_review_tables.emp_id', $emp_id)
+            ->select('client_review_tables.*', 'all_clients.client_name')
+            ->get();
+
+
+
         $users = [
             'evaluation' => DB::table('evaluation_tables')->where('emp_id', $emp_id)->first(),
             'managerReview' => DB::table('manager_review_tables')->where('emp_id', $emp_id)->first(),
             'adminReview' => DB::table('admin_review_tables')->where('emp_id', $emp_id)->first(),
             'hrReview' => DB::table('hr_review_tables')->where('emp_id', $emp_id)->first(),
-            'clientReview' => DB::table('client_review_tables')->where('emp_id', $emp_id)->first(),
-            'superAddUser' => DB::table('super_add_users')->where('employee_id', $emp_id)->first()
+            // 'clientReview' => DB::table('client_review_tables')->where('emp_id', $emp_id)->first(),
+            'clientReview' => DB::table('client_review_tables')->where('emp_id', $emp_id)->get(),
+            'superAddUser' => DB::table('super_add_users')->where('employee_id', $emp_id)->first(),
+            'AllClient' => DB::table('all_clients')->get(),
         ];
 
         $user_roles = json_decode($users['superAddUser']->user_roles, true);
@@ -1102,7 +744,7 @@ class SuperAdminController extends Controller
             return redirect()->back()->with('error', 'No review data found for this employee.');
         }
 
-        return view('review/viewDetails', compact('users', 'emp_id', 'user_roles'));
+        return view('review/viewDetails', compact('users', 'emp_id', 'user_roles', 'clientReviews'));
     }
 
     public function getSuperAdminEvaluationView(Request $request, $emp_id)
@@ -1123,6 +765,7 @@ class SuperAdminController extends Controller
         $user = HrReviewTable::where('emp_id', $emp_id)
             ->where('financial_year', $financialYear)
             ->firstOrFail();
+
         return view('reports/hrReport', compact('user'));
     }
 
@@ -1150,23 +793,40 @@ class SuperAdminController extends Controller
     public function getSuperAdminClientReview(Request $request, $emp_id)
     {
         $financialYear = $request->get('financial_year');
+        $clientId = $request->get('client_id');
 
-        $user = ClientReviewTable::where('emp_id', $emp_id)
+        $user = ClientReviewTable::with('client') // <-- Eager load the client relationship
+            ->where('emp_id', $emp_id)
             ->where('financial_year', $financialYear)
+            ->where('client_id', $clientId)
             ->firstOrFail();
+
+
+        // dd($user->client);
 
         return view('reports/clientReport', compact('user'));
     }
 
 
-    //View Probation Period
+
     public function getProbationPeriod()
     {
-        // $user = SuperAddUser::get()->all();
-        $user = SuperAddUser::where('Designation', '!=', 'Client')->get();
+        $currentDate = Carbon::now()->toDateString();
+
+        $user = SuperAddUser::where('Designation', '!=', 'Client')
+            ->orderByRaw("CASE WHEN probation_date = ? THEN 0 ELSE 1 END", [$currentDate])
+            ->orderBy('probation_date', 'desc')
+            ->orderBy('fname', 'asc')
+            ->orderBy('lname', 'asc')
+            ->get();
 
         return view('admin.probation', compact('user'));
     }
+
+
+
+
+
 
 
     public function getPendingAppraisalView(Request $request)
@@ -1253,60 +913,223 @@ class SuperAdminController extends Controller
     }
 
 
-public function getReviewScoresSuperAdmin(Request $request)
-{
-    // Get from JSON body
-    $empId = $request->input('emp_id') ?? $request->input('employee_id');
-    // $empId = $request->input('emp_id');
-    $year = $request->input('financial_year');
+    public function getReviewScoresSuperAdmin(Request $request)
+    {
+        // Get from JSON body
+        $empId = $request->input('emp_id') ?? $request->input('employee_id');
+        // $empId = $request->input('emp_id');
+        $year = $request->input('financial_year');
 
-    // Debug (optional)
-    // var_dump($empId, $year); exit;
+        // Debug (optional)
+        // var_dump($empId, $year); exit;
 
-    // Get user info
-    $user = SuperAddUser::where('employee_id', $empId)->first();
-    $roles = json_decode($user?->user_roles ?? '[]', true);
-    $showClient = in_array('client', $roles);
+        // Get user info
+        $user = SuperAddUser::where('employee_id', $empId)->first();
+        $roles = json_decode($user?->user_roles ?? '[]', true);
+        $showClient = in_array('client', $roles);
 
-    // Fetch total scores from individual review tables
-    $evaluation = evaluationTable::where('emp_id', $empId)
-        ->where('financial_year', $year)
-        ->first();
-
-    $adminReview = AdminReviewTable::where('emp_id', $empId)
-        ->where('financial_year', $year)
-        ->first();
-
-    $hrReview = HrReviewTable::where('emp_id', $empId)
-        ->where('financial_year', $year)
-        ->first();
-
-    $managerReview = ManagerReviewTable::where('emp_id', $empId)
-        ->where('financial_year', $year)
-        ->first();
-
-    $clientReview = null;
-    if ($showClient) {
-        $clientReview = ClientReviewTable::where('emp_id', $empId)
+        // Fetch total scores from individual review tables
+        $evaluation = evaluationTable::where('emp_id', $empId)
             ->where('financial_year', $year)
             ->first();
+
+        $adminReview = AdminReviewTable::where('emp_id', $empId)
+            ->where('financial_year', $year)
+            ->first();
+
+        $hrReview = HrReviewTable::where('emp_id', $empId)
+            ->where('financial_year', $year)
+            ->first();
+
+        $managerReview = ManagerReviewTable::where('emp_id', $empId)
+            ->where('financial_year', $year)
+            ->first();
+
+        $clientReview = null;
+        if ($showClient) {
+            $clientReview = ClientReviewTable::where('emp_id', $empId)
+                ->where('financial_year', $year)
+                ->first();
+        }
+
+        // Build response
+        $response = [
+            'total' => $evaluation?->total_scoring_system,
+            'adminTotal' => $adminReview?->AdminTotalReview,
+            'hrTotal' => $hrReview?->HrTotalReview,
+            'managerTotal' => $managerReview?->ManagerTotalReview,
+            'showClient' => $showClient,
+        ];
+
+        if ($showClient) {
+            $response['clientTotal'] = $clientReview?->ClientTotalReview;
+        }
+
+        return response()->json($response);
     }
 
-    // Build response
-    $response = [
-        'total' => $evaluation?->total_scoring_system,
-        'adminTotal' => $adminReview?->AdminTotalReview,
-        'hrTotal' => $hrReview?->HrTotalReview,
-        'managerTotal' => $managerReview?->ManagerTotalReview,
-        'showClient' => $showClient,
-    ];
 
-    if ($showClient) {
-        $response['clientTotal'] = $clientReview?->ClientTotalReview;
+    public function viewAddClient(Request $request)
+    {
+
+        return view('admin/addClient');
     }
 
-    return response()->json($response);
-}
+
+    public function createClient(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'client_name'   => 'nullable|string|max:50',
+            'company_name'  => 'nullable|string|max:50',
+            'client_mobno'  => 'nullable|regex:/^[\d\s\-\+\(\)]+$/|max:20',
+            'client_email'  => 'nullable|email|max:50',
+            'password'      => 'required|string|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $validated = $validator->validated();
+
+        // Check if a similar client already exists
+        $exists = AllClient::where('client_email', $validated['client_email'])->first();
+
+        if ($exists) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Client already exists with this email.'
+            ]);
+        }
+
+        // Store client (hash password if stored)
+        AllClient::create([
+            'client_name' => $validated['client_name'],
+            'company_name' => $validated['company_name'],
+            'client_mobno' => $validated['client_mobno'],
+            'client_email' => $validated['client_email'],
+            'password' => bcrypt($validated['password']),
+            'user_type' => $request->input('user_type'),
+        ]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Client added successfully.'
+        ]);
+    }
+
+    public function getClients()
+    {
+        $clients = AllClient::select('id', 'client_name', 'client_email')->get();
+
+        return response()->json($clients);
+    }
+
+    public function getManager()
+    {
+        $managers = SuperAddUser::where('user_type', 'manager')
+            ->select('id', 'fname', 'lname')
+            ->get();
+
+        $formatted = $managers->map(function ($manager) {
+            $fullName = trim($manager->fname . ' ' . $manager->lname);
+
+            return [
+                'id' => $manager->id,
+                'text' => $fullName,
+            ];
+        });
+
+        return response()->json($formatted);
+    }
+
+
+
+    //Edit User
+    public function editUserView(Request $request, $id)
+    {
+        // Get the user
+        $user = SuperAddUser::findOrFail($id);
+
+        // Decode JSON client IDs to array
+        $clientIds = json_decode($user->client_id, true) ?? [];
+
+        // Fetch selected clients for display (optional)
+        $clients = AllClient::whereIn('id', $clientIds)->get();
+
+        // Fetch all clients for the dropdown
+        // $allClients = AllClient::select('id', 'client_name')->get();
+
+        // Decode user_roles JSON field to array
+        $userRoles = json_decode($user->user_roles, true) ?? [];
+
+
+        // Get user_type (this assumes it's a field in SuperAddUser)
+        $userType = $user->user_type;
+
+        // dd($user,$clients,$clientIds,  $userRoles, $userType);
+        return view('admin.editUser', compact('user', 'clients', 'clientIds',  'userRoles', 'userType'));
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        // dd($request);
+
+
+        $request->validate([
+            'fname' => 'required|string|max:255',
+            'lname' => 'required|string|max:255',
+            'mobno' => 'required|string|max:15',
+            'email' => 'required|email|max:255',
+            'employee_id' => 'nullable|string|max:255',
+            'dob' => 'required|date',
+            'gender' => 'nullable|in:male,female,other',
+            'designation' => 'nullable|string|max:255',
+            'division' => 'nullable|string|max:255',
+            'manager_name' => 'nullable|string|max:255',
+            'manager_id' => 'nullable|integer|exists:super_add_users,id',
+            'user_type' => 'required|string|in:admin,hr,users,manager',
+            'probation_date' => 'nullable|date',
+            'salary' => 'nullable|numeric|min:0',
+            'password' => 'nullable|string|confirmed|min:6',
+            'client_id' => 'nullable|array',
+            'client_id.*' => 'integer|exists:all_clients,id',
+            'user_roles' => 'nullable|array',
+            'user_roles.*' => 'string',
+        ]);
+        // var_dump($request);
+
+        $user = SuperAddUser::findOrFail($id);
+        // Update base user fields
+        $user->fname = $request->fname;
+        $user->lname = $request->lname;
+        $user->mobno = $request->mobno;
+        $user->email = $request->email;
+        $user->employee_id = $request->employee_id; // if editable
+        $user->dob = $request->dob;
+        $user->gender = $request->gender;
+        $user->designation = $request->designation;
+        $user->division = $request->division;
+        $user->manager_name = $request->manager_name;
+        $user->manager_id = $request->manager_id;
+        $user->user_type = $request->user_type;
+        $user->probation_date = $request->probation_date;
+        $user->salary = $request->salary;
+
+        // Save JSON fields
+        $user->client_id = json_encode($request->client_id ?? []);
+        $user->user_roles = json_encode($request->user_roles ?? []);
+
+        // Update password only if provided
+        if (!empty($request->password)) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+        return redirect()->back()->with('success', 'User updated successfully!');
+    }
 
 
 
@@ -1316,14 +1139,47 @@ public function getReviewScoresSuperAdmin(Request $request)
 
 
 
+    public function search(Request $request)
+    {
+        $search = $request->get('q');
+
+        $clients = AllClient::where('client_name', 'like', '%' . $search . '%')
+            ->select('id', 'client_name', 'company_name')
+            ->limit(20)
+            ->get();
+
+        return response()->json($clients);
+    }
 
 
 
+    //Client Managemrnt page
+    public function viewClints(Request $request)
+    {
+
+        $allClients = AllClient::get();
+
+        return view('admin/clientManagement', compact('allClients'));
+    }
 
 
+    public function clientToggleStatus($id)
+    {
 
+        // Find client by ID
+        $client = AllClient::find($id);
 
+        if (!$client) {
+            return response()->json(['success' => false, 'error' => 'Client not found'], 404);
+        }
 
+        // Toggle status (assuming status is 0 or 1)
+        $client->status = $client->status ? 0 : 1;
+        $client->save();
 
-
+        return response()->json([
+            'success' => true,
+            'new_status' => $client->status
+        ]);
+    }
 }

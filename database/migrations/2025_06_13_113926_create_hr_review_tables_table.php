@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('hr_review_tables', function (Blueprint $table) {
             $table->id();
-             $table->string('emp_id');
+            $table->string('emp_id');
             $table->string('adherence_hr', 20)->nullable();
             $table->string('comments_adherence_hr', 150)->nullable();
             $table->string('professionalism_positive', 20)->nullable();

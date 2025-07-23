@@ -95,6 +95,11 @@ return [
         'address' => env('MAIL_FROM_ADDRESS', 'maityamar825@gmail.com'),
         'name' => env('MAIL_LOCAL_DOMAIN', 'Mail'),
     ],
+//     'from' => [
+//     'address' => env('MAIL_FROM_ADDRESS', 'delostylestudio@gmail.com'),
+//     'name' => env('MAIL_FROM_NAME', 'Delostyle Studio'),
+// ],
+
 
     /*
     |--------------------------------------------------------------------------

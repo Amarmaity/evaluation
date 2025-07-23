@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Hr Dashboard')
+@section('title', 'Hr Review')
 
 @section('breadcrumb', 'Hr')
 
@@ -15,6 +15,12 @@
             font-size: 14px;
             text-align: center;
         }
+         .hidden-label {
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-left: 28px;
+        }
     </style>
 
     <head>
@@ -26,17 +32,8 @@
             @csrf
             <div class="client">
                 <h1 class="client__heading">HR REVIEW</h1>
-                <div class="client___item">
-                    <input type="search" id="employee_search" name="search" class="form-control client__search"
-                        placeholder="search employee" aria-label="Search">
-                    <button class="client__btn" type="submit">
-                        <img src="https://modest-gagarin.74-208-156-247.plesk.page/images/search.png" alt="Search">
-                    </button>
-                </div>
-                <!-- Hidden Employee ID (if used in scripts) -->
-                {{-- <input type="hidden" name="emp_id" id="selectedEmpId"> --}}
 
-                <!-- Financial Year Dropdown -->
+                 <!-- Financial Year Dropdown -->
                 <select id="financialYear" class="form-select client__select" name="financial_year" required>
                     <option value="" selected>Financial Year</option>
                     <option value="2025-2026">2025-2026</option>
@@ -45,50 +42,57 @@
                     <option value="2028-2029">2028-2029</option>
                     <option value="2029-2030">2029-2030</option>
                 </select>
+
+                <div class="client___item">
+                    <input type="search" id="employee_search" name="search" class="form-control client__search"
+                        placeholder="search employee" aria-label="Search">
+                    <button class="client__btn" type="submit">
+                        <img src="https://modest-gagarin.74-208-156-247.plesk.page/images/search.png" alt="Search">
+                    </button>
+                </div>
             </div>
 
             <!-- Search Results Table -->
             <div class="container mt-5 employee-table" id="employeeDetails" style="display:none; border: 1px solid #ddd;">
-                <table class="table table-bordered table-hover client-table">
-                    <thead>
-                        <tr>
-                            <th>Employee ID</th>
-                            <th>Employee Name</th>
-                            <th>Designation</th>
-                            <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody id="employeeTableBody">
-                        <tr>
-                            <td colspan="4">Start typing to search...</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-wrapper">
+                    <!-- <div id="selectLabel" class="hidden-label" style="margin-bottom: 10px; font-weight: bold; display: none;">
+                        Select the employee:
+                    </div> -->
+                    <table class="table table-bordered table-hover client-table">
+                        <thead>
+                            <tr>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Designation</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeTableBody">
+                            {{-- <tr id="selectLabelRow">
+                                <td colspan="4"><strong>Select the employee:</strong></td>
+                            </tr> --}}
+                            <tr>
+                                <td colspan="4">Start typing to search...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="form-section">
 
                 <div>
-                    {{-- <div class="d-none"> --}}
-                        {{-- <div class="text-block"> --}}
-                            {{-- <label for="employee_id">Employee Id:</label> --}}
                             <input type="hidden" id="emp_id_input" name="emp_id" placeholder="Enter Employee Id" required>
                             </input>
-                            {{--
-                        </div> --}}
-                        {{-- </div> --}}
-
                     <div class="accordion">
                         <div class="content-block">
                             <input type="checkbox" id="section1">
                             <label for="section1" class="main-label">A. Professional Conduct and Policy Compliance</label>
                             <div class="content">
-                                <label for="adherence_hr" class="second-label">1. How would you rate the employee’s adherence
+                                <label for="adherence_hr" class="second-label">1. How would you rate the employee’s
+                                    adherence
                                     to company policies and
                                     procedures?:</label>
-                                <!-- <input type="number" name="adherence_hr" id="hr1" min="0" max="5" required
-                                            oninput="hrTotalReview()" placeholder="Rate Yourself">
-                                        </input> -->
                                 <select class="form-select" aria-label="multiple select example" name="adherence_hr"
                                     id="hr1" required>
                                     <option selected disabled>Rate</option>
@@ -102,8 +106,7 @@
                                 <div class="review-block">
                                     <label for="comments_adherence" class="third-label">Justify Your Review:</label>
                                     <textarea name="comments_adherence_hr" id="comments" class="form-control" rows="1"
-                                        cols="50" maxlength="255" placeholder="Write your justification here..."
-                                    ></textarea>
+                                        cols="50" maxlength="255" placeholder="Write your justification here..."></textarea>
                                 </div>
 
 
@@ -111,9 +114,6 @@
                                     <label for="professionalism_positive" class="second-label">2. Does the employee
                                         maintain professionalism and a positive
                                         attitude in the workplace?:</label>
-                                    <!-- <input type="number" name="professionalism_positive" id="hr2" min="0" max="5" required
-                                                oninput="hrTotalReview()" placeholder="Rate Yourself">
-                                            </input> -->
                                     <select class="form-select" aria-label="multiple select example"
                                         name="professionalism_positive" id="hr1" required>
                                         <option selected disabled>Rate</option>
@@ -125,19 +125,17 @@
                                     </select>
 
                                     <div class="review-block">
-                                        <label for="comments_professionalism_positive" class="third-label">Justify Your Review:</label>
+                                        <label for="comments_professionalism_positive" class="third-label">Justify Your
+                                            Review:</label>
                                         <textarea name="comments_professionalism" id="comments" class="form-control"
                                             rows="1" cols="50" maxlength="255"
-                                            placeholder="Write your justification here..." ></textarea>
+                                            placeholder="Write your justification here..."></textarea>
                                     </div>
                                 </div>
                                 <div>
                                     <label for="respond_feedback" class="second-label">3. How well does the employee
                                         respond to feedback or
                                         suggestions for improvement from colleagues?:</label>
-                                    <!-- <input type="number" name="respond_feedback" id="hr3" min="0" max="5" required
-                                                    oninput="hrTotalReview()" placeholder="Rate Yourself">
-                                                </input> -->
                                     <select class="form-select" aria-label="multiple select example" id="hr1"
                                         name="respond_feedback" required>
                                         <option selected disabled>Rate</option>
@@ -151,22 +149,20 @@
                                 <div class="review-block">
                                     <label for="comments_respond_feedback" class="third-label">Justify Your Review:</label>
                                     <textarea name="comments_respond_feedback" id="comments" class="form-control" rows="1"
-                                        cols="50" maxlength="255" placeholder="Write your justification here..."
-                                        ></textarea>
+                                        cols="50" maxlength="255" placeholder="Write your justification here..."></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="content-block">
                             <input type="checkbox" id="section2">
-                            <label for="section2" class="main-label">B. Initiative, Learning Engagement, and Policy Adherence</label>
+                            <label for="section2" class="main-label">B. Initiative, Learning Engagement, and Policy
+                                Adherence</label>
                             <div class="content">
-                                <label for="initiative" class="second-label">1. Does the employee take the initiative to seek
+                                <label for="initiative" class="second-label">1. Does the employee take the initiative to
+                                    seek
                                     feedback and
                                     act
                                     on it?:</label>
-                                <!-- <input type="number" name="initiative" id="hr4" min="0" max="5" required
-                                                    oninput="hrTotalReview()" placeholder="Rate Yourself">
-                                                </input> -->
                                 <select class="form-select" aria-label="multiple select example" id="hr1" name="initiative"
                                     required>
                                     <option selected disabled>Rate</option>
@@ -180,17 +176,14 @@
                                 <div class="review-block">
                                     <label for="comments_initiative" class="third-label">Justify Your Review:</label>
                                     <textarea name="comments_initiative" id="comments" class="form-control" rows="1"
-                                        cols="50" maxlength="255" placeholder="Write your justification here..."
-                                        ></textarea>
+                                        cols="50" maxlength="255" placeholder="Write your justification here..."></textarea>
                                 </div>
 
                                 <div>
-                                    <label for="comfortable_discussing" class="second-label">2. Has the employee shown interest
+                                    <label for="comfortable_discussing" class="second-label">2. Has the employee shown
+                                        interest
                                         in learning and
                                         participating in training programs?</label>
-                                    <!-- <input type="number" name="interest_learning" id="hr5" min="0" max="5" required
-                                                    oninput="hrTotalReview()" placeholder="Rate Yourself">
-                                                </input> -->
                                     <select class="form-select" aria-label="multiple select example" id="hr1"
                                         name="interest_learning" required>
                                         <option selected disabled>Rate</option>
@@ -204,8 +197,7 @@
                                 <div class="review-block">
                                     <label for="comments_interest_learning" class="third-label">Justify Your Review:</label>
                                     <textarea name="comments_interest_learning" id="comments" class="form-control" rows="1"
-                                        cols="50" maxlength="255" placeholder="Write your justification here..."
-                                        ></textarea>
+                                        cols="50" maxlength="255" placeholder="Write your justification here..."></textarea>
                                 </div>
 
 
@@ -214,9 +206,6 @@
                                         adhere to the
                                         company's
                                         leave policy?</label>
-                                    <!-- <input type="number" name="company_leave_policy" id="hr6" min="0" max="5" required
-                                                    oninput="hrTotalReview()" placeholder="Rate Yourself">
-                                                </input> -->
                                     <select class="form-select" aria-label="multiple select example" id="hr1"
                                         name="company_leave_policy" required>
                                         <option selected disabled>Rate</option>
@@ -228,10 +217,11 @@
                                     </select>
                                 </div>
                                 <div class="review-block">
-                                    <label for="comments_company_leave_policy" class="third-label">Justify Your Review:</label>
+                                    <label for="comments_company_leave_policy" class="third-label">Justify Your
+                                        Review:</label>
                                     <textarea name="comments_company_leave_policy" id="comments" class="form-control"
-                                        rows="1" cols="50" maxlength="255" placeholder="Write your justification here..."
-                                        ></textarea>
+                                        rows="1" cols="50" maxlength="255"
+                                        placeholder="Write your justification here..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -241,12 +231,10 @@
                                 <li class="breadcrumb-item" name="HrTotalReview" id="HrTotalReview" readonly></li>
                                 <li class="breadcrumb-item">30</li>
                             </ol>
-                            <!-- <input type="text" name="ClientTotalReview" id="clientTotalReview" readonly> -->
                         </div>
 
                         <div class="form-section mt-4">
                             <div class="d-flex justify-content-center">
-                                {{-- <button type="reset" class="btn btn-primary">Cancel</button> --}}
                                 <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
                             </div>
                         </div>
@@ -261,66 +249,74 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(function () {
-            let timeout = null;
+        let timeout = null;
 
-            function searchUser() {
-                const keyword = $('#employee_search').val().trim();
+        function searchUser() {
+            const keyword = $('#employee_search').val().trim();
 
-                if (keyword.length < 2) {
-                    $('#employeeDetails').hide();
-                    return;
-                }
-
-                $('#employeeDetails').show();
-                $('#employeeTableBody').html('<tr><td colspan="4">Searching...</td></tr>');
-
-                clearTimeout(timeout);
-
-                timeout = setTimeout(function () {
-                    $.ajax({
-                        url: '{{ route("user-search") }}',
-                        type: 'GET',
-                        data: {
-                            keyword: keyword
-                        },
-                        success: function (response) {
-                            $('#employeeTableBody').empty();
-
-                            if (response.success) {
-                                response.users.forEach(function (user) {
-                                    $('#employeeTableBody').append(`
-                                                <tr class="selectable-row" data-emp-id="${user.employee_id}">
-                                                    <td>${user.employee_id}</td>
-                                                    <td>${user.fname} ${user.lname}</td>
-                                                    <td>${user.designation}</td>
-                                                    <td>${user.email}</td>
-                                                </tr>
-                                            `);
-                                });
-                            } else {
-                                $('#employeeTableBody').html(
-                                    '<tr><td colspan="4">No users found</td></tr>');
-                            }
-                        },
-                        error: function () {
-                            alert("An error occurred. Please try again.");
-                        }
-                    });
-                }, 1000);
+            if (keyword.length < 2) {
+                $('#employeeDetails').hide();
+                $('#selectLabel').hide(); // Hide label when input is too short
+                return;
             }
 
-            $('#employee_search').on('keyup', searchUser);
+            $('#employeeDetails').show();
+            $('#employeeTableBody').html('<tr><td colspan="4">Searching...</td></tr>');
+            $('#selectLabel').hide(); // Hide while searching
 
-            // Set emp_id on row click
-            $(document).on('click', '.selectable-row', function () {
-                var empId = $(this).data('emp-id');
-                $('#emp_id_input').val(empId);
+            clearTimeout(timeout);
 
-                // Keep only the selected row in the table
-                var selectedRow = $(this).clone();
-                $('#employeeTableBody').empty().append(selectedRow);
-            });
+            timeout = setTimeout(function () {
+                $.ajax({
+                    url: '{{ route("user-search") }}',
+                    type: 'GET',
+                    data: {
+                        keyword: keyword
+                    },
+                    success: function (response) {
+                        $('#employeeTableBody').empty();
+
+                        if (response.success && response.users.length > 0) {
+                            $('#selectLabel').show(); // ✅ Show label before user selects
+
+                            response.users.forEach(function (user) {
+                                $('#employeeTableBody').append(`
+                                    <tr class="selectable-row" data-emp-id="${user.employee_id}">
+                                        <td>${user.employee_id}</td>
+                                        <td>${user.fname} ${user.lname}</td>
+                                        <td>${user.designation}</td>
+                                        <td>${user.email}</td>
+                                    </tr>
+                                `);
+                            });
+                        } else {
+                            $('#selectLabel').hide(); // Hide label if no results
+                            $('#employeeTableBody').html(
+                                '<tr><td colspan="4">No users found</td></tr>'
+                            );
+                        }
+                    },
+                    error: function () {
+                        alert("An error occurred. Please try again.");
+                    }
+                });
+            }, 1000); // Debounce delay
+        }
+
+        // Trigger search on keyup
+        $('#employee_search').on('keyup', searchUser);
+
+        // Handle row selection
+        $(document).on('click', '.selectable-row', function () {
+            var empId = $(this).data('emp-id');
+            $('#emp_id_input').val(empId);
+
+            var selectedRow = $(this).clone().addClass('table-active');
+            $('#employeeTableBody').empty().append(selectedRow);
+
+            $('#selectLabel').hide(); // ✅ HIDE label after user selects
         });
+    });
 
         document.addEventListener("DOMContentLoaded", function () {
             const hrForm = document.getElementById("HrReviewSubmit");

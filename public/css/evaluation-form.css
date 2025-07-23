@@ -21,6 +21,19 @@ h1 {
     text-transform: capitalize;
 }
 
+.sidebar-wrapper .nav-item:hover .bi::before,
+[class*=" bi-"]::before,
+[class^=bi-]::before {
+    color: #000000;
+}
+
+.sidebar-wrapper .nav-item .nav-link.active .bi::before,
+[class*=" bi-"]::before,
+[class^=bi-]::before {
+    color: #000000;
+}
+
+
 .bi::before,
 [class*=" bi-"]::before,
 [class^=bi-]::before {
@@ -38,6 +51,115 @@ body.special-page .app-main .app-main__div {
     border-radius: 20px !important;
     margin-bottom: 30px !important;
 }
+
+.table-responsive {
+    border-radius: 10px;
+    overflow-y: hidden;
+    border: 0.67px solid #B5B5B5;
+    overflow-x: scroll;
+
+}
+
+.table-wrapper {
+    border-radius: 10px;
+    overflow-y: hidden;
+    border: 0.67px solid #B5B5B5;
+    overflow-x: scroll;
+}
+
+.table>:not(:first-child) {
+    border-top: unset !important;
+}
+
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 0.67px solid #B5B5B5;
+    margin-bottom: 0px !important;
+}
+
+.main-table {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.6);
+    margin-bottom: 0px !important;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.modified-table {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.6);
+    margin-bottom: 0px !important;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.table-view {
+    cursor: unset;
+    pointer-events: auto;
+}
+
+.table th {
+    background-color: #FFFFFF !important;
+}
+
+.table th {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: #000000 !important;
+    padding: 10px !important;
+}
+
+.main-table th {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: #4B4A4A8C !important;
+    padding: 24px 28px !important;
+}
+
+.modified-table th {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: #4B4A4A8C !important;
+    padding: 24px 28px !important;
+}
+
+
+.table td {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: #000000 !important;
+    padding: 10px !important;
+}
+
+.main-table td {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: #000000 !important;
+    padding: 24px 18px !important;
+}
+
+.modified-table td {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: #000000 !important;
+    padding: 24px 18px !important;
+}
+
 
 button {
     width: unset !important;
@@ -271,12 +393,6 @@ h4 {
     border: 1px solid #00000033 !important;
 }
 
-.table-wrapper {
-    border-radius: 10px;
-    overflow-y: hidden;
-    border: 0.67px solid #B5B5B5;
-    overflow-x: scroll;
-}
 
 .table-wrapper--modified {
     margin-top: 40px;
@@ -314,8 +430,15 @@ h4 {
 }
 
 .client__btn img {
+    cursor: auto;
     width: 20px;
     height: 20px;
+}
+
+.client__btn:focus,
+.client__btn:hover,
+.client__btn:focus-within {
+    background-color: unset !important;
 }
 
 .client__btn {
@@ -338,13 +461,55 @@ h4 {
     letter-spacing: 0;
 
 }
-.secondary-btn{
+
+.btn-secondary {
+    background-color: #FFFFFF !important;
+    font-size: 14px !important;
+    padding: 18px 20px !important;
+    color: #000000 !important;
+    border-radius: 12px !important;
+    max-width: 200px;
+    min-width: 150px;
+    max-height: 56px;
+    min-height: 56px;
+    border: 1.21px solid #FFFFFF;
+    transition: all 0.3s ease;
+    margin-bottom: 26px;
+}
+
+.btn-secondary:hover {
+    background-color: #00274D !important;
+    border: 1.21px solid #00000033;
+    color: #FFFFFF !important;
+}
+
+.secondary-btn {
     background-color: #00274D !important;
     font-size: 14px !important;
     padding: 18px 20px !important;
     color: #FFFFFF !important;
     border-radius: 12px !important;
+    max-width: 200px;
+    min-width: 150px;
+    max-height: 56px;
+    min-height: 56px;
 }
+
+.btn-paired {
+    background-color: #00274D !important;
+    color: #FFFFFF !important;
+    font-size: 14px !important;
+    padding: 18px 20px !important;
+    border-radius: 12px !important;
+    max-width: 200px;
+    min-width: 150px;
+    max-height: 56px;
+    min-height: 56px;
+    border: 1.21px solid #FFFFFF;
+    transition: all 0.3s ease;
+    margin-bottom: 26px;
+}
+
 .content-block {
     background-color: #FFFFFF;
     border-radius: 20px;
@@ -369,6 +534,29 @@ h4 {
     border-radius: 12px !important;
     color: #FFFFFF !important;
 }
+
+.modified-btn {
+    background-color: #00274D !important;
+    border: 1.2px solid #00000033 !important;
+    min-width: 160px !important;
+    padding: 12px 25px !important;
+    margin-top: 20px;
+    border-radius: 12px !important;
+    color: #FFFFFF !important;
+}
+
+
+.form-section1 {
+    box-shadow: none !important;
+}
+
+.form-section1 textarea {
+    padding: 13px 0px 13px 24px;
+    resize: none;
+    border-radius: 10px;
+    margin-bottom: 0px;
+}
+
 
 .form-section1 .btn.btn-primary {
     background-color: #00274D !important;
@@ -450,8 +638,15 @@ h4 {
 .client-table {
     border-radius: 10px;
     overflow: hidden;
-    border: 0.67px solid #B5B5B5;
+    border: 1px solid rgba(0, 0, 0, 0.6);
     margin-bottom: 0px !important;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.table-view {
+    cursor: unset;
+    pointer-events: auto;
 }
 
 .client-table th {
@@ -472,30 +667,6 @@ h4 {
     padding: 24px 28px !important;
 }
 
-.main-table {
-    border-radius: 10px;
-    overflow: hidden;
-    border: 0.67px solid #B5B5B5;
-    margin-bottom: 0px !important;
-}
-
-.main-table th {
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 1.4;
-    letter-spacing: 0;
-    color: #4B4A4A8C !important;
-    padding: 24px 28px !important;
-}
-
-.main-table td {
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 1.4;
-    letter-spacing: 0;
-    color: #000000 !important;
-    padding: 24px 18px !important;
-}
 
 .main-table .btn.btn-primary {
     background-color: #00274D;
@@ -505,6 +676,17 @@ h4 {
     padding: 16px 25px;
     border-radius: 12px !important;
 }
+
+/* .modified-table .btn.btn-primary {
+    background-color: #00274D;
+    border-radius: 2px !important;
+    border: 1.2px solid #00000033;
+}
+
+.modified-table .btn.btn-default {
+    border: 1.2px solid #00000033;
+    border-radius: 2px !important;
+} */
 
 .content-block textarea {
     border-radius: 10px;
@@ -733,6 +915,70 @@ button.info-button {
     background-color: transparent !important;
 }
 
+.form-section .select2-selection__clear {
+    display: none;
+}
+
+.form-section .select2-selection {
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 0.67px solid #B5B5B5 !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+    padding: .375rem .75rem !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    color: #212529 !important;
+    max-width: 460px !important;
+    min-height: 45px !important;
+    border-radius: 10px !important;
+}
+
+.form-section .select2-selection::placeholder {
+    color: #A3A1A1 !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    letter-spacing: 0 !important;
+}
+
+.form-section .select2-container--bootstrap-5 .select2-selection--multiple .select2-search .select2-search__field {
+    margin-top: unset !important;
+    margin-left: unset !important;
+    vertical-align: middle !important;
+    height: unset !important;
+}
+
+.form-section .select2-container {
+    max-width: 460px !important;
+}
+
+.toggle-btn {
+    margin-bottom: 10px;
+}
+
+.edit-user .fa-edit {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #00274D;
+}
+.edit-icon {
+    border: none !important;
+}
+.edit-icon:hover, .edit-icon:active,.edit-icon:focus {
+    background-color: unset !important;
+    color: unset !important;
+    box-shadow: none !important;
+}
+.edit-icon:active:focus-visible{
+    box-shadow: none !important;
+}
+.modal-dialog .btn-close:hover, .modal-dialog .btn-close:active,.modal-dialog .btn-close:focus{
+    background-color: unset !important;
+    color: unset !important;
+    box-shadow: none !important;
+}
+
 @media(min-width: 1400px) {
     #emp_id_input {
         min-width: 600px;
@@ -742,7 +988,7 @@ button.info-button {
     }
 
     .table-wrapper {
-        overflow-x: hidden;
+        overflow-x: scroll;
     }
 }
 

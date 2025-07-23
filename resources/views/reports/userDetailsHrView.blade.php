@@ -4,7 +4,26 @@
 
 @section('breadcrumb', "Employee {$employee_id} / View Hr Review")
 
+@section('body-class', 'special-page')
+
 @section('content')
+
+<style>
+        .span-tage .span-data {
+            display: flex;
+            justify-content: space-between;
+            padding-right: 60px;
+        }
+
+        .span-tage tr {
+            /* border-bottom: 1px solid #000; */
+            margin-bottom: 30px;
+        }
+    </style>
+
+
+
+
     <div class="container">
         
         <!-- Back Button aligned to the right -->
@@ -12,40 +31,42 @@
             <a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
         </div>
         
-        <h2>HR Review Details: {{$employee_id}}</h2>
+        <h2 class="heading">HR Review Details: {{$employee_id}}</h2>
         <!-- HR Review History Table -->
-        <table id="hrReviewHistoryTable" class="display table table-striped table-bordered">
+         <div class="table-container span-tage">
+            <div class="table-wrapper">
+        <table id="hrReviewHistoryTable" class="table table-bordered table-hover main-table">
             <thead>
                 <tr>
-                    <th>Field</th>
-                    <th>Rating / Comments</th>
+                    <th class="span-data">Field <span>Rating</span></th>
+                    <th>Comments</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($reviews as $review)
                     <tr>
-                        <td>How would you rate the employee’s adherence to company policies and procedures?</td>
-                        <td>{{ $review->adherence_hr }} / {{ $review->comments_adherence_hr }}</td>
+                        <td  class="span-data">1. How would you rate the employee’s adherence to company policies and procedures? <span>({{ $review->adherence_hr }}/5)</span></td>
+                        <td>{{ $review->comments_adherence_hr }}</td>
                     </tr>
                     <tr>
-                        <td>Does the employee maintain professionalism and a positive attitude in the workplace?</td>
-                        <td>{{ $review->professionalism_positive }} / {{ $review->comments_professionalism }}</td>
+                        <td class="span-data">2. Does the employee maintain professionalism and a positive attitude in the workplace? <span>({{ $review->professionalism_positive }} /5)</span></td>
+                        <td>{{ $review->comments_professionalism }}</td>
                     </tr>
                     <tr>
-                        <td>How well does the employee respond to feedback or suggestions for improvement from colleagues?</td>
-                        <td>{{ $review->respond_feedback }} / {{ $review->comments_respond_feedback }}</td>
+                        <td class="span-data">3. How well does the employee respond to feedback or suggestions for improvement from colleagues? <span>({{ $review->respond_feedback }} /5)</span></td>
+                        <td>{{ $review->comments_respond_feedback }}</td>
                     </tr>
                     <tr>
-                        <td>Does the employee take the initiative to seek feedback and act on it?</td>
-                        <td>{{ $review->initiative }} / {{ $review->comments_initiative }}</td>
+                        <td class="span-data">3. Does the employee take the initiative to seek feedback and act on it? <span>({{ $review->initiative }} /5)</span></td>
+                        <td>{{ $review->comments_initiative }}</td>
                     </tr>
                     <tr>
-                        <td>Has the employee shown interest in learning and participating in training programs?</td>
-                        <td>{{ $review->interest_learning }} / {{ $review->comments_interest_learning }}</td>
+                        <td class="span-data">4. Has the employee shown interest in learning and participating in training programs? <span>({{ $review->interest_learning }} /5)</span></td>
+                        <td>{{ $review->comments_interest_learning }}</td>
                     </tr>
                     <tr>
-                        <td>Does the employee consistently adhere to the company's leave policy?</td>
-                        <td>{{ $review->company_leave_policy }} / {{ $review->comments_company_leave_policy }}</td>
+                        <td class="span-data">5. Does the employee consistently adhere to the company's leave policy? <span>({{ $review->company_leave_policy }} /5)</span></td>
+                        <td>{{ $review->comments_company_leave_policy }}</td>
                     </tr>
                     <tr>
                         <td>Total HR Review Score</td>
@@ -54,6 +75,8 @@
                 @endforeach
             </tbody>
         </table>
+        </div>
+        </div>
     </div>
 @endsection
 

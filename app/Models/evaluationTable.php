@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class evaluationTable extends Model
 {
     use HasFactory;
+
     protected $table = 'evaluation_tables';
 
     protected $fillable = [

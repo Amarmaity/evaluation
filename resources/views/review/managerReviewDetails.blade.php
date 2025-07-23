@@ -6,6 +6,8 @@
 
 @section('page-title', 'Manager Review Details') <!-- Page Title in Breadcrumb -->
 
+@section('body-class', 'special-page')
+
 @section('content')
 
 
@@ -14,7 +16,7 @@
 <h3>Manager Review for Employee: </h3>
 {{-- {{ $users->employee_name ?? 'N/A' }} --}}
 
-<table class="table table-striped table-hover table-bordered">
+<table class="table  table-bordered table-hover main-table">
     <thead>
         <tr>
             @foreach($managerColumnMapings as $dbColumn => $label)

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AdminReviewTable extends Model
 {
     use HasFactory;
+
     protected $table = 'admin_review_tables';
     protected $fillable = [
         'emp_id',

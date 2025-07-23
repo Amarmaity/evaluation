@@ -1,3 +1,10 @@
+@extends('layouts.app')
+@section('breadcrumb', 'Evaluation/' . $employee_id)
+@section('title', 'Evaluation')
+
+@section('content')
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +13,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Side by Side Form</title>
 
-    @extends('layouts.app')
 
     <!-- CSRF Token for AJAX -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -22,8 +28,6 @@
     }
 </style>
 
-@section('breadcrumb', 'Evaluation/' . $employee_id)
-@section('content')
 
     <body>
 
@@ -953,188 +957,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    // $(document).ready(function () {
-    //     $.ajaxSetup({
-    //         headers: {
-    //             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-    //         }
-    //     });
-
-    //     $("#evaluationSubmit").submit(function (event) {
-    //         event.preventDefault();
-
-    //         // let userEmail = $("#emailInput").val();
-    //         // console.log(userEmail);
-
-    //         const $submitBtn = $(this).find("button[type='submit']");
-    //         $submitBtn.prop("disabled", true).text("Sending OTP...");
-    //         let countdown = 5;
-    //         $submitBtn.text(`Wait ${countdown}s`);
-
-    //         let otpTimer = setInterval(() => {
-    //             countdown--;
-    //             if (countdown <= 0) {
-    //                 clearInterval(otpTimer);
-    //                 $submitBtn.prop("disabled", false).text("Resend OTP");
-    //             } else {
-    //                 $submitBtn.text(`Wait ${countdown}s`);
-    //             }
-    //         }, 1000);
-
-    //         $.ajax({
-    //             url: "{{ route('evaluation-send-otp') }}",
-    //             type: "POST",
-    //             data: {
-    //                 email: userEmail
-    //             },
-    //             success: function (response) {
-    //                 console.log("OTP Sent Response:", response);
-    //                 if (response.success) {
-    //                     $("#otpModal").modal("show");
-    //                 } else {
-    //                     alert(response.message || "Failed to send OTP!");
-    //                     $submitBtn.prop("disabled", false).text("Save");
-    //                 }
-    //             },
-    //             error: function (xhr) {
-    //                 console.error("OTP Request Error:", xhr.responseText);
-    //                 alert("Something went wrong! Please try again.");
-    //                 $submitBtn.prop("disabled", false).text("Save");
-    //             }
-    //         });
-    //     });
-
-
-    //     // OTP Form Submit
-    //     $("#otpForm").submit(function (event) {
-    //         event.preventDefault();
-
-    //         $.ajax({
-    //             url: "{{ route('evaluation-verify-otp') }}", // OTP Verification Route
-    //             type: "POST",
-    //             data: {
-    //                 email: "{{ session('otp_email') }}",
-    //                 otp: $("input[name='otp']").val(),
-    //                 _token: "{{ csrf_token() }}"
-    //             },
-    //             success: function (response) {
-    //                 console.log("OTP Verified Response:", response);
-    //                 if (response.success) {
-    //                     alert("OTP Verified!");
-    //                     $("input[name='otp']").val("")
-    //                     $("#otpModal").modal("hide");
-    //                     submitEvaluationForm();
-    //                 } else {
-    //                     alert(response.message || "Invalid OTP!");
-    //                 }
-    //             },
-    //             error: function (xhr) {
-    //                 console.error("OTP Verification Error:", xhr.responseText);
-    //                 alert("Enter Valid OTP! Please try again.");
-    //             }
-    //         });
-    //     });
-
-    //     $(".close").on("click", function () {
-    //         $("#otpModal").modal("hide");
-    //     });
-
-    //     $("#otpModal").on("hidden.bs.modal", function () {
-    //         $("input[name='otp']").val("");
-    //     });
-
-    //     // Main submit function with duplicate check
-    //     function submitEvaluationForm() {
-    //         let formData = new FormData($("#evaluationSubmit")[0]);
-    //         formData.append("email", "{{ session('otp_email') }}");
-
-    //         const empId = $("#evaluationSubmit input[name='emp_id']").val();
-
-    //         console.log("Submitting Evaluation Form Data:", [...formData.entries()]);
-
-    //         $.ajax({
-    //             url: "{{ route('check-duplicate-evaluation') }}",
-    //             type: "POST",
-    //             data: {
-    //                 emp_id: empId,
-    //                 _token: "{{ csrf_token() }}"
-    //             },
-    //             success: function (res) {
-    //                 if (res.exists) {
-    //                     Swal.fire({
-    //                         icon: 'warning',
-    //                         title: 'Duplicate Submission',
-    //                         text: res.message
-    //                     });
-    //                     return;
-    //                 }
-
-    //                 // Now submit the actual evaluation
-    //                 $.ajax({
-    //                     url: "{{ route('insert-data-evaluation') }}",
-    //                     type: "POST",
-    //                     data: formData,
-    //                     processData: false,
-    //                     contentType: false,
-    //                     success: function (response) {
-    //                         if (response.success) {
-    //                             Swal.fire({
-    //                                 icon: 'success',
-    //                                 title: 'Success',
-    //                                 text: response.message
-    //                             }).then(() => {
-    //                                 $("#evaluationSubmit")[0].reset();
-    //                                 window.location.href = response.redirect_url;
-    //                             });
-    //                         } else {
-    //                             Swal.fire({
-    //                                 icon: 'error',
-    //                                 title: 'Submission Failed',
-    //                                 text: response.message ||
-    //                                     "Failed to submit evaluation."
-    //                             });
-    //                         }
-    //                     },
-    //                     error: function (xhr) {
-    //                         let errorMessage = "Something went wrong! Please try again.";
-
-    //                         // Try to extract the JSON message from response
-    //                         if (xhr.responseJSON && xhr.responseJSON.message) {
-    //                             errorMessage = xhr.responseJSON.message;
-    //                         } else if (xhr.responseText) {
-    //                             try {
-    //                                 const res = JSON.parse(xhr.responseText);
-    //                                 if (res.message) {
-    //                                     errorMessage = res.message;
-    //                                 }
-    //                             } catch (e) {
-    //                                 console.warn("Failed to parse error JSON");
-    //                             }
-    //                         }
-
-    //                         Swal.fire({
-    //                             icon: 'error',
-    //                             title: 'Error',
-    //                             text: errorMessage
-    //                         });
-    //                     }
-    //                 });
-    //             },
-    //             error: function (xhr) {
-    //                 Swal.fire({
-    //                     icon: 'error',
-    //                     title: 'Validation Error',
-    //                     text: "Could not validate employee. Please try again."
-    //                 });
-    //             }
-    //         });
-    //     }
-
-    // });
-
-
-
-    $(document).ready(function () {
+       $(document).ready(function () {
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
@@ -1202,6 +1025,9 @@
                         alert("OTP Verified!");
                         $("input[name='otp']").val("");
                         $("#otpModal").modal("hide");
+
+                          $("#loaderOverlay").show();
+
                         submitEvaluationForm();
                     } else {
                         alert(response.message || "Invalid OTP!");

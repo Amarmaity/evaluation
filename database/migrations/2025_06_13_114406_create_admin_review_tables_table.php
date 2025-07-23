@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('admin_review_tables', function (Blueprint $table) {
             $table->id();
-            $table->string('emp_id');
+             $table->string('emp_id');
             $table->string('demonstrated_attendance', 20)->nullable();
             $table->string('comments_demonstrated_attendance', 150)->nullable();
             $table->string('employee_manage_shift', 20)->nullable();
