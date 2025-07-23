@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('employee_name', 150)->nullable();
             $table->string('emp_id')->nullable();
-            $table->string('evaluation_score',150)->nullable();
             $table->string('hr_review', 150)->nullable();
             $table->string('admin_review', 150)->nullable();
             $table->string('manager_review', 150)->nullable();

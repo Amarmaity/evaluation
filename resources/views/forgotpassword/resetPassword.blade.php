@@ -50,6 +50,9 @@
             <div class="mb-3">
                 <label for="password" class="form-label">New Password</label>
                 <input type="password" class="form-control" name="password" required>
+                @error('password')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
             </div>
 
             <!-- Confirm Password Input -->

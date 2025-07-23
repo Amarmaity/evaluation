@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Financial Dashboard')
+@section('title', 'Appraisal Done')
 
 @section('breadcrumb', 'Appraisal Done')
 
@@ -31,6 +31,10 @@
         border: 1px solid #ccc;
         border-radius: 4px;
     }
+    /* table.dataTable thead th {
+        font-weight: normal !important;
+        text-decoration: none !important;
+    } */
 </style>
 
 <body>
@@ -44,21 +48,12 @@
             </button>
         </div>
         <input type="hidden" name="emp_id" id="selectedEmpId">
-
-        {{-- <select id="financialYear" class="form-select client__select" name="financial_year" required>
-                <option value="" selected>Financial Year</option>
-                <option value="2025-2026">2025-2026</option>
-                <option value="2026-2027">2026-2027</option>
-                <option value="2027-2028">2027-2028</option>
-                <option value="2028-2029">2028-2029</option>
-                <option value="2029-2030">2029-2030</option>
-            </select> --}}
     </div>
     <div class="container table-container">
         <div class="table-wrapper">
 
             @if($financialData->count() > 0)
-            <table class="table table-bordered table-hover main-tabler financial-table" id="employeeDetails"
+            <table class="table table-bordered table-hover main-table table-view financial-table" id="employeeDetails"
                 class="financial-table">
                 <thead>
                     <tr>
@@ -111,10 +106,32 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
 
 <script>
-    $(document).ready(function () {
+
+     $(document).ready(function () {
+            var table = $('#employeeDetails').DataTable({
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "paging": true,
+                "lengthChange": false,
+                "pageLength": 10,
+                // "lengthMenu": [5, 10, 25, 50, 100],
+                "order": [
+                    [2, 'desc']
+                ],
+            }); 
+
+            // Bind the custom search input
+            $('#employee_search').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        });
+
+        $(document).ready(function () {
     let originalTableHtml = $('#employeeList').html(); // store original on load
     let typingTimer;
     const debounceDelay = 400;
@@ -217,60 +234,6 @@
         });
     }
 });
-
-
-
-// Filter by Financial Year from table column
-// $('#employeeDetails').on('change', function () {
-// let selectedYear = $(this).val();
-
-// if (selectedYear !== '') {
-// $.ajax({
-// url: '/financial/filter-financial-year',
-// type: 'POST',
-// data: {
-// _token: $('meta[name="csrf-token"]').attr('content'),
-// financial_year: selectedYear
-// },
-// dataType: 'json',
-// success: function (response) {
-// $('#employeeList').empty();
-
-// if (response.data && response.data.length > 0) {
-// response.data.forEach(financial => {
-// let row = `<tr>
-//     <td>${financial[0]}</td>
-//     <td>${financial[1]}</td>
-//     <td>${financial[2]}</td>
-//     <td>${financial[3]}</td>
-//     <td>${financial[4]}</td>
-//     <td>${financial[5]}</td>
-//     <td>${financial[6]}</td>
-//     <td>${financial[7]}</td>
-//     <td>${financial[8]}</td>
-//     <td>${financial[9]}</td>
-//     <td>${financial[10]}</td>
-//     <td>${financial[11]}</td>
-//     <td>${financial[12]}</td>
-//     <td>${financial[13]}</td>
-//     </tr>`;
-// $('#employeeList').append(row);
-// });
-// } else {
-// $('#employeeList').html('<tr>
-//     <td colspan="14">No matching records found</td>
-// </tr>');
-// }
-// },
-// error: function (xhr) {
-// alert('Failed to filter data: ' + xhr.responseText);
-// }
-// });
-// } else {
-// // If user resets the filter to empty, you may want to restore original data or clear table
-// $('#employeeList').html(originalTableHtml);
-// }
-// });
 
 </script>
 

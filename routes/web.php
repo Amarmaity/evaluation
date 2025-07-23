@@ -9,6 +9,9 @@ use App\Http\Controllers\superadmin\addUserController;
 use App\Http\Controllers\superadmin\SuperAdminController;
 use App\Http\Controllers\userController\allUserController;
 use App\Http\Middleware\DissableBackBtn;
+use App\Models\SuperAddUser;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Http\Request;
 
 
 /*
@@ -71,6 +74,8 @@ Route::group(['middleware' => DissableBackBtn::class], function () {
 
 
         Route::get('/add-user', [addUserController::class, 'indexAddUser'])->name('add-user');
+        Route::get('/create-client', [SuperAdminController::class, 'viewAddClient'])->name('create-client');
+        Route::get('/client-list',[SuperAdminController::class, 'viewClints'])->name('client-list');
         Route::get('/super-admin-search', [SuperAdminController::class, 'searchUser'])->name('super.search');
         Route::get('/super-admin-search-bar', [SuperAdminController::class, 'superAdminSearchUser'])->name('super-user-search-bar');
         Route::get('/user-list', [SuperAdminController::class, 'userListView'])->name('userlist');
@@ -96,6 +101,13 @@ Route::post('/verify-otp-login-users', [allUserController::class, 'loginUserVeri
 
 //User Review Reports
 Route::get('/review-reports/{emp_id}', [allUserController::class, 'reviewUserReport'])->name('get-review-reports');
+Route::get('/search-managers', [SuperAdminController::class, 'getManager'])->name('get.manager');
+
+
+
+
+
+
 
 
 
@@ -118,8 +130,9 @@ Route::get('/client-search-user',[allUserController::class,'clientSearch'])->nam
 
 //Apprisal 
 Route::get('/apprisal-data', [SuperAdminController::class, 'getAppraisalData'])->name('apprisal.data');
-// Route::post('/toggle-status/{id}', [SuperAdminController::class, 'toggleStatus'])->name('toggle-status');
 Route::post('/toggle-status/{user_type}/{identifier}', [SuperAdminController::class, 'toggleStatus']);
+
+Route::post('/toggle-status-client/{id}', [SuperAdminController::class, 'clientToggleStatus'])->name('client.toggle.status');
 
 Route::get('/search-employee', [SuperAdminController::class, 'searchEmployee']);
 // Route::post('/toggle-status/{id}', [SuperAdminController::class, 'toggleStatus']);
@@ -162,12 +175,13 @@ Route::get('/user/details/manager/{employee_id}',[allUserController::class,'show
 Route::get('/client-review-list',[allUserController::class,'getClientReviewList'])->name('client-review-list');
 Route::get('/user/details/client/{employee_id}',[allUserController::class,'showDetailsClient'])->name('user-client-details');
 //Evaluation View
-Route::get('/evaluation-view-hr/{employee_id}',[allUserController::class,'showEvaluationDetails'])->name('user-report-view-evaluation');
+Route::get('/evaluation-view/{employee_id}',[allUserController::class,'showEvaluationDetails'])->name('user-report-view-evaluation');
 Route::post('/evaluation-report-submit/{emp_id}',[HomeController::class,'submitEvaluationDirector'])->name('director-submit-from');
 
 
 Route::get('/setting',[FinancialYearController::class,'getSettingView'])->name('setting-view');
 Route::post('save-apprisal',[FinancialYearController::class,'setApprisalPercentage'])->name('submit-apprisal-all');
+Route::put('/update-financial-year/{id}', [FinancialYearController::class, 'update'])->name('update-financial-year');
 Route::get('/probation-period',[SuperAdminController::class,'getProbationPeriod'])->name('get-probation');
 
 
@@ -208,3 +222,77 @@ Route::get('/employee/review-scores', [allUserController::class, 'getReviewScore
 Route::post('/employee/review-score/super-user',[SuperAdminController::class,'getReviewScoresSuperAdmin'])->name('employee.review-score-super-user');
 //Get Manager Name is Add User Dashboard
 Route::get('/get-managers',[addUserController::class,'getManagers'])->name('get.managers');
+
+//Mail Anniversaries for employee
+
+Route::get('/run-anniversary-email/{token}', function ($token) {
+    if ($token !== 'secure123') {
+        abort(403, 'Unauthorized access');
+    }
+
+    Artisan::call('email:send-anniversaries');
+    return '✅ Anniversary emails processed.';
+});
+
+//new client save
+Route::post('/save-new-client', [SuperAdminController::class, 'createClient'])->name('new-client');
+// client detailes autopopulate in adduser Client assigine dropdown 
+Route::get('/get-clients', [SuperAdminController::class, 'getClients'])->name('get.clients');
+
+
+Route::get('/edit-user/{id}',[SuperAdminController::class, 'editUserView'])->name('edit-user');
+Route::put('/update-user/{id}', [SuperAdminController::class, 'updateUser'])->name('update-user');
+
+//Search edit
+Route::get('/search/clients', [SuperAdminController::class, 'search'])->name('get.clients');
+
+
+//This should 
+Route::get('/run-probation-appraisal/{token}', function ($token) {
+    if ($token !== 'secure123') {
+        abort(403, 'Unauthorized access');
+    }
+
+    Artisan::call('apply:probation-appraisal');
+    return '✅ Probation appraisal command executed.';
+});
+
+Route::get('/run-update-employee-status/{token}', function ($token) {
+    if ($token !== 'secure123') {
+        abort(403, 'Unauthorized access');
+    }
+
+    Artisan::call('employee:update-status');
+    return '✅ Employee status update command executed.';
+});
+
+
+
+
+Route::get('/api/manager-names', function (Request $request) {
+    $query = $request->get('q');
+
+    $managers = SuperAddUser::where('user_type', 'LIKE', '%manager%')
+        ->when($query, function ($q) use ($query) {
+            $q->where(function ($subQuery) use ($query) {
+                $subQuery->where('fname', 'LIKE', '%' . $query . '%')
+                         ->orWhere('lname', 'LIKE', '%' . $query . '%');
+            });
+        })
+        ->select('id', 'fname', 'lname')
+        ->get()
+        ->unique(function ($item) {
+            return strtolower($item->fname . ' ' . $item->lname); // ensure uniqueness by name
+        })
+        ->values()
+        ->map(function ($manager) {
+            $fullName = trim($manager->fname . ' ' . $manager->lname);
+            return [
+                'id' => $manager->id,
+                'text' => $fullName,
+                'name' => $fullName,
+            ];
+        });
+
+    return response()->json($managers);
+});

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use App\Mail\EvaluationOtpMail;
 use App\Mail\EvaluationSubmitted;
+use App\Models\AllClient;
 use App\Models\SuperAddUser;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
@@ -40,7 +41,7 @@ class HomeController extends Controller
             'division' => $employee->division,
             // 'department' => $employee->department,
             'dob' => $employee->dob,
-            'financial_year' =>$employee->financial_year
+            'financial_year' => $employee->financial_year
         ]);
     }
 
@@ -113,22 +114,22 @@ class HomeController extends Controller
     {
         $employeeId = $request->input('emp_id');
         $employee = SuperAddUser::where('employee_id', $employeeId)->first();
-        
+
         if (!$employee) {
             return response()->json([
                 'success' => false,
                 'message' => 'Employee record not found!'
             ], 404);
         }
-        
+
         if ($employee->probation_date && now()->lt(Carbon::parse($employee->probation_date))) {
             return response()->json([
                 'success' => false,
                 'message' => 'Evaluation cannot be submitted. Employee is still under probation period.'
             ], 403);
         }
-        
-        
+
+
         // Check if the session's employee_id matches the emp_id from the request
         if (Session::get('employee_id') !== $employeeId) {
             return response()->json([
@@ -136,8 +137,8 @@ class HomeController extends Controller
                 'message' => 'Employee ID is not correct. Data not inserted.'
             ], 400);
         }
-        
-        
+
+
         $empFinancialYear = $employee->financial_year;
         // Check if the provided financial_year in the request matches the employee's financial year
         if ($empFinancialYear !== $request->input('financial_year')) {
@@ -146,10 +147,10 @@ class HomeController extends Controller
                 'message' => 'The financial year is not correct, Data not submitted.'
             ], 400);
         }
-        
+
         Log::info('Request Data:', $request->all());
         Log::info('Session Data:', Session::all());
-        
+
         // Check if OTP is verified
         if (!Session::get('otp_verified')) {
             return response()->json([
@@ -167,7 +168,7 @@ class HomeController extends Controller
         }
 
         $request->validate([
-            'evaluator_signatur' => 'nullable|mimes:jpg,png,pdf|max:2048',
+            'evaluator_signatur' => 'required|mimes:jpg,png,pdf|max:2048',
             'director_signatur' => 'nullable|mimes:jpg,png,pdf|max:2048',
             'financial_year' => [
                 'required',
@@ -180,27 +181,7 @@ class HomeController extends Controller
         ]);
 
 
-        // ✅ Check evaluation.created_at and employee.updated_at are both older than 1 year
-        // $existingEvaluation = evaluationTable::where('emp_id', $employeeId)
-        //     ->where('financial_year', $request->input('financial_year'))
-        //     ->orderBy('created_at', 'desc')
-        //     ->first();
-
-        // $oneYearAgo = now()->subYear();
-        // $evalCreatedRecently = $existingEvaluation && $existingEvaluation->created_at->gt($oneYearAgo);
-        // $employeeUpdatedRecently = $employee->updated_at && $employee->updated_at->gt($oneYearAgo);
-
-        // if ($evalCreatedRecently && $employeeUpdatedRecently) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'You have already submitted an evaluation for the last financial year. You must wait one year before submitting an evaluation for the current financial year.'
-        //     ], 400);
-        // }
-
-
-
-
-        $evaluatorSignaturePath = $request->hasFile('evaluator_signatur')
+       $evaluatorSignaturePath = $request->hasFile('evaluator_signatur')
             ? $request->file('evaluator_signatur')->store('signatures', 'public') // Store in public directory
             : null;
 
@@ -279,12 +260,36 @@ class HomeController extends Controller
                 $evaluation = evaluationTable::create($data);
                 $hrEmails = SuperAddUser::where('user_type', 'hr')->pluck('email')->toArray();
                 $adminEmails = SuperAddUser::where('user_type', 'admin')->pluck('email')->toArray();
-                $managerEmails = SuperAddUser::where('user_type', 'manager')->pluck('email')->toArray();
-                // $clientEmails = SuperAddUser::where('user_type', 'client')->pluck('email')->toArray();
-                $clientEmails = [];
-                if (in_array('client', $userRoles)) {
-                    $clientEmails = SuperAddUser::where('user_type', 'client')->pluck('email')->toArray();
+
+                // $managerEmails = [];
+                // if (in_array('manager', $userRoles)) {
+                //     $managerEmails = SuperAddUser::where('user_roles', 'manager', )->pluck('email')->toArray();
+                // }
+                $managerEmails = [];
+
+                if (!empty($employee->manager_id)) {
+                    $manager = SuperAddUser::find($employee->manager_id);
+                    if ($manager && !empty($manager->email)) {
+                        $managerEmails[] = $manager->email;
+                    }
                 }
+
+
+                $clientEmails = [];
+
+                if (in_array('client', $userRoles)) {
+                    // Decode client_id JSON array from SuperAddUser
+                    $clientIds = json_decode($employee->client_id, true); // Example: ["2", "3", "4"]
+
+                    if (is_array($clientIds) && count($clientIds) > 0) {
+                        // Fetch only active client emails from AllClient
+                        $clientEmails = AllClient::whereIn('id', $clientIds)
+                            ->where('status', 1)
+                            ->pluck('client_email')
+                            ->toArray();
+                    }
+                }
+
                 // Combine primary roles
                 $recipients = array_merge($hrEmails, $adminEmails, $managerEmails, $clientEmails);
                 $submittedBy = Session::get('user_email');

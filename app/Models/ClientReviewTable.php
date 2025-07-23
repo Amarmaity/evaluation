@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\AllClient;
 
 class ClientReviewTable extends Model
 {
@@ -13,6 +14,7 @@ class ClientReviewTable extends Model
 
     protected $fillable = [
         'emp_id',
+        'client_id',
         'understand_requirements',
         'comment_understand_requirements',
         'business_needs',
@@ -56,4 +58,9 @@ class ClientReviewTable extends Model
         'ClientTotalReview',
         'financial_year'
     ];
+
+        public function client()
+{
+    return $this->belongsTo(AllClient::class, 'client_id');
+}
 }

@@ -7,11 +7,97 @@ use App\Models\FinancialData;
 use App\Models\SuperAddUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
 use Carbon\Carbon;
 
 class FinancialYearController extends Controller
 {
-    //
+
+    // public function storeFinancialData(Request $request)
+    // {
+    //     $employeeData = $request->input('employees');
+    //     if (!$employeeData || count($employeeData) === 0) {
+    //         return response()->json(['message' => 'No employee data provided!'], 400);
+    //     }
+
+    //     $dataToInsert = [];
+
+    //     foreach ($employeeData as $index => $empData) {
+
+    //         $empId = $empData['emp_id'];
+    //         $financialYear = $empData['financial_year'];
+
+    //         if (!$empId || !$financialYear) {
+    //             return response()->json([
+    //                 'message' => 'Missing emp_id or financial_year for one of the employees.'
+    //             ], 400);
+    //         }
+
+    //         // Check if this employee already has an appraisal for this financial year
+    //         $existingRecord = FinancialData::where('emp_id', $empId)
+    //         ->where('financial_year', $financialYear)
+    //         ->first();
+
+    //         if ($existingRecord) {
+    //             return response()->json([
+    //                 'message' => 'Employee ' . ($empData['employee_name'] ?? '') . ' already has an appraisal for financial year ' . $financialYear . '. Please wait until next year.'
+    //             ], 400);
+    //         }
+
+
+    //         $dataToInsert[] = [
+    //             'employee_name' => $empData['employee_name'] ?? null,
+    //             'emp_id' => $empData['emp_id'],
+    //             'evaluation_score' => $empData['evaluation_score'] ?? 0,
+    //             'hr_review' => $empData['hr_review'] ?? 0,
+    //             'admin_review' => $empData['admin_review'] ?? 0,
+    //             'manager_review' => $empData['manager_review'] ?? 0,
+    //             'clint_review' => $empData['client_review'] ?? 0,
+    //             'apprisal_score' => $empData['apprisal_score'] ?? 0,
+    //             'current_salary' => $empData['current_salary'] ?? 0,
+    //             'percentage_given' => $empData['percentage_given'] ?? 0,
+    //             'update_salary' => $empData['update_salary'] ?? 0,
+    //             'final_salary' => $empData['final_salary'] ?? 0,
+    //             'apprisal_date' => $empData['apprisal_date'] ?? null,
+    //             'financial_year' => $empData['financial_year'] ?? null,
+    //             'created_at' => now(),
+    //             'updated_at' => now(),
+    //         ];
+    //         // dd('hi');
+    //     }
+    //     // DD($dataToInsert);
+
+
+    //     // Insert all data in one query
+    //     FinancialData::insert($dataToInsert);
+
+
+    //     // ✅ Now apply your requirement: update SuperAddUser table
+    //     foreach ($employeeData as $empData) {
+    //         $empId = $empData['emp_id'];
+
+    //         // Get latest financial year and percentage from AppraisalTable (global, not by emp_id)
+    //         $latestAppraisal = ApprisalTable::orderBy('created_at', 'desc')->first();
+
+    //         if ($latestAppraisal) {
+    //             $superUser = SuperAddUser::where('employee_id', $empId)->first(); // Make sure this is the correct field
+    //             if ($superUser) {
+    //                 // Only update if different
+    //                 if (
+    //                     $superUser->financial_year !== $latestAppraisal->financial_year ||
+    //                     $superUser->company_percentage != $latestAppraisal->company_percentage
+    //                 ) {
+    //                     $superUser->financial_year = $latestAppraisal->financial_year;
+    //                     $superUser->company_percentage = $latestAppraisal->company_percentage;
+    //                     $superUser->save();
+    //                 }
+    //             }
+    //         }
+    //         return response()->json(['message' => 'Financial data saved successfully!']);
+    //     }
+    // }
+
 
     public function storeFinancialData(Request $request)
     {
@@ -19,32 +105,42 @@ class FinancialYearController extends Controller
         if (!$employeeData || count($employeeData) === 0) {
             return response()->json(['message' => 'No employee data provided!'], 400);
         }
-        
+
         $dataToInsert = [];
-        
+
         foreach ($employeeData as $index => $empData) {
-            
+
             $empId = $empData['emp_id'];
             $financialYear = $empData['financial_year'];
-            
+
             if (!$empId || !$financialYear) {
                 return response()->json([
                     'message' => 'Missing emp_id or financial_year for one of the employees.'
                 ], 400);
             }
-            
+
             // Check if this employee already has an appraisal for this financial year
             $existingRecord = FinancialData::where('emp_id', $empId)
-            ->where('financial_year', $financialYear)
-            ->first();
-            
+                ->where('financial_year', $financialYear)
+                ->first();
+
             if ($existingRecord) {
                 return response()->json([
                     'message' => 'Employee ' . ($empData['employee_name'] ?? '') . ' already has an appraisal for financial year ' . $financialYear . '. Please wait until next year.'
                 ], 400);
             }
-            
-            
+
+            // Calculate salary grade based on final salary
+            $finalSalary = $empData['final_salary'] ?? 0;
+            $salaryGrade = $this->determineSalaryGrade($finalSalary);
+
+            // Update salary_grade in SuperAddUser
+            $superUser = SuperAddUser::where('employee_id', $empId)->first();
+            if ($superUser && $superUser->salary_grade !== $salaryGrade) {
+                $superUser->salary_grade = $salaryGrade;
+                $superUser->save();
+            }
+
             $dataToInsert[] = [
                 'employee_name' => $empData['employee_name'] ?? null,
                 'emp_id' => $empData['emp_id'],
@@ -57,32 +153,26 @@ class FinancialYearController extends Controller
                 'current_salary' => $empData['current_salary'] ?? 0,
                 'percentage_given' => $empData['percentage_given'] ?? 0,
                 'update_salary' => $empData['update_salary'] ?? 0,
-                'final_salary' => $empData['final_salary'] ?? 0,
+                'final_salary' => $finalSalary,
                 'apprisal_date' => $empData['apprisal_date'] ?? null,
                 'financial_year' => $empData['financial_year'] ?? null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-            // dd('hi');
         }
-        // DD($dataToInsert);
 
-
-        // Insert all data in one query
+        // Insert all financial data
         FinancialData::insert($dataToInsert);
 
-
-        // ✅ Now apply your requirement: update SuperAddUser table
+        // Update SuperAddUser financial year & company percentage
         foreach ($employeeData as $empData) {
             $empId = $empData['emp_id'];
 
-            // Get latest financial year and percentage from AppraisalTable (global, not by emp_id)
             $latestAppraisal = ApprisalTable::orderBy('created_at', 'desc')->first();
 
             if ($latestAppraisal) {
-                $superUser = SuperAddUser::where('employee_id', $empId)->first(); // Make sure this is the correct field
+                $superUser = SuperAddUser::where('employee_id', $empId)->first();
                 if ($superUser) {
-                    // Only update if different
                     if (
                         $superUser->financial_year !== $latestAppraisal->financial_year ||
                         $superUser->company_percentage != $latestAppraisal->company_percentage
@@ -93,8 +183,20 @@ class FinancialYearController extends Controller
                     }
                 }
             }
-            return response()->json(['message' => 'Financial data saved successfully!']);
         }
+
+        return response()->json(['message' => 'Financial data saved successfully!']);
+    }
+
+    //Healper Function
+    private function determineSalaryGrade($salary)
+    {
+        if ($salary >= 150000) return 'A';
+        if ($salary >= 100000)  return 'B';
+        if ($salary >= 70000)  return 'C';
+        if ($salary >= 40000)  return 'D';
+        if ($salary >= 20000)  return 'E';
+        return 'F';
     }
 
     public function financialTableView(Request $request)
@@ -214,6 +316,7 @@ class FinancialYearController extends Controller
 
     public function setApprisalPercentage(Request $request)
     {
+        Log::info('HIT setApprisalPercentage', $request->all());
         // Step 1: Validate input
         $request->validate([
             'financial_year' => 'required|string',
@@ -275,118 +378,105 @@ class FinancialYearController extends Controller
     }
 
 
+    // public function update(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'company_percentage' => 'required|numeric|min:0|max:100',
+    //     ]);
 
+    //     // Get the existing appraisal record
+    //     $record = ApprisalTable::findOrFail($id);
+    //     $financialYear = $record->financial_year;
 
+    //     // Check if the FinancialData already contains this financial year
+    //     $exists = FinancialData::where('financial_year', $financialYear)->exists();
 
+    //     if (!$exists) {
+    //         $record->company_percentage = $request->company_percentage;
+    //         $record->save();
 
+    //         return response()->json(['status' => 'success']);
+    //     } else {
+    //         return response()->json(['error'], 409);
+    //     }
+    // }
 
+    // public function update(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'company_percentage' => 'required|numeric|min:0|max:100',
+    //     ]);
 
+    //     // Step 1: Find the ApprisalTable record
+    //     $record = ApprisalTable::findOrFail($id);
+    //     $financialYear = $record->financial_year;
 
+    //     // Step 2: Check if FinancialData exists for that year
+    //     $exists = FinancialData::where('financial_year', $financialYear)->exists();
 
+    //     // dd($exists);
 
+    //     if (!$exists) {
+    //         // Step 3: Update the ApprisalTable company_percentage
+    //         $record->company_percentage = $request->company_percentage;
+    //         $record->save();
 
+    //         // Step 4: Get emp_ids that already exist in financial_data
+    //         $empIdsWithFinancialData = DB::table('financial_data')
+    //             ->pluck('emp_id')
+    //             ->toArray();
 
+    //         // Step 5: Update company_percentage in SuperAddUser
+    //         SuperAddUser::where('financial_year', $financialYear)
+    //             ->where('employee_status', 'Employee')
+    //             ->whereNotIn('employee_id', $empIdsWithFinancialData)
+    //             ->update([
+    //                 'company_percentage' => $request->company_percentage
+    //             ]);
 
+    //         return response()->json(['status' => 'success']);
+    //     } else {
+    //         return response()->json(['error' => 'FinancialData already exists for this year.'], 409);
+    //     }
+    // }
 
+    public function update(Request $request, $id)
+{
+    $request->validate([
+        'company_percentage' => 'required|numeric|min:0|max:100',
+    ]);
 
+    // Step 1: Find the ApprisalTable record
+    $record = ApprisalTable::findOrFail($id);
+    $financialYear = $record->financial_year;
 
+    // Step 2: Check if FinancialData already has entries for this financial year
+    $financialDataExists = FinancialData::where('financial_year', $financialYear)->exists();
 
-
-
-
-
-
-
-
-
-
-
-
-
-    public function filterByFinancialYear(Request $request)
-    {
-        $yearRange = trim($request->input('financial_year'));
-
-        if (!$yearRange) {
-            return response()->json(['data' => []]);
-        }
-
-
-        $users = SuperAddUser::where('financial_year', $yearRange)->get();
-
-        if ($users->isEmpty()) {
-            return response()->json(['data' => []]);
-        }
-
-        $data = [];
-
-        foreach ($users as $user) {
-            $data[] = [
-                $user->fname . ' ' . $user->lname,
-                $user->employee_id,
-                $user->designation,
-                $user->dob,
-                $user->salary,
-                $user->email,
-                $user->financial_year,
-                $user->employee_status ?? '--',
-                $user->probation_date ?? 'Not Set',
-                '<button class="btn btn-calendar" onclick="showCalendar(\'' . $user->employee_id . '\')">Set Date</button>
-                     <div id="calendar' . $user->employee_id . '" class="calendar-container" style="display:none;">
-                         <input type="date" id="probationDateInput' . $user->employee_id . '">
-                         <button onclick="setProbationDate(\'' . $user->employee_id . '\')">Set Date</button>
-                     </div>'
-            ];
-        }
-
-        return response()->json(['data' => $data]);
+    if ($financialDataExists) {
+        return response()->json([
+            'error' => 'FinancialData already exists for this year. Cannot update company percentage.',
+        ], 409);
     }
 
+    // Step 3: Update ApprisalTable company_percentage
+    $record->company_percentage = $request->company_percentage;
+    $record->save();
 
+    // Step 4: Get employee IDs who have already completed their appraisal
+    $empIdsWithFinancialData = FinancialData::where('financial_year', $financialYear)
+        ->pluck('emp_id')
+        ->toArray();
 
+    // Step 5: Update only eligible SuperAddUser entries
+    SuperAddUser::where('employee_status', 'Employee')
+        ->where('financial_year', $financialYear)
+        ->whereNotIn('employee_id', $empIdsWithFinancialData)
+        ->update([
+            'company_percentage' => $request->company_percentage
+        ]);
 
+    return response()->json(['status' => 'success']);
+}
 
-
-
-
-    public function filterFinancialTableByYear(Request $request)
-    {
-        $year = $request->input('financial_year');
-
-        if (!$year) {
-            return response()->json(['data' => []]);
-        }
-
-        $financialData = FinancialData::join('super_add_users', 'financial_data.emp_id', '=', 'super_add_users.employee_id')
-            ->where('super_add_users.status', 1)
-            ->where('super_add_users.financial_year', $year)
-            ->get([
-                'financial_data.*',
-                'super_add_users.fname',
-                'super_add_users.lname',
-                'super_add_users.financial_year'
-            ]);
-
-        $data = [];
-
-        foreach ($financialData as $financial) {
-            $data[] = [
-                $financial->emp_id,
-                $financial->fname . ' ' . $financial->lname,
-                $financial->hr_review ?? '-',
-                $financial->admin_review ?? '-',
-                $financial->manager_review ?? '-',
-                $financial->clint_review ?? '-',
-                $financial->apprisal_score ?? '-',
-                $financial->current_salary ?? '-',
-                $financial->percentage_given ?? '-',
-                $financial->financial_year ?? '-',
-                $financial->update_salary ?? '-',
-                $financial->final_salary ?? '-',
-                $financial->apprisal_date ?? '-'
-            ];
-        }
-
-        return response()->json(['data' => $data]);
-    }
 }

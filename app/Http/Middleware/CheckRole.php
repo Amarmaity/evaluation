@@ -46,7 +46,7 @@ class CheckRole
             'client' => ['client-dashboard', 'client-review', 'client-dashboard'],
             'Super User' => ['super-user-dashboard', 'super-user-review', 'add-user', 'userlist', 'super.search',
             'appraisal-view', 'financial.view', 'logout-users', 'user-search', 'super-admin-search', 'super-user-search-bar', 'active-user', 'financial-view', 'super-admin-view',
-            'financial-view-tables', 'employee.details', 'evaluation.details', 'hr.review.details','manager.review.details','admin.review.details','setting-view']
+            'financial-view-tables', 'employee.details', 'evaluation.details', 'hr.review.details','manager.review.details','admin.review.details','setting-view','create-client', 'client-list']
         ];
 
         // Get the current route name

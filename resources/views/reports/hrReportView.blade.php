@@ -109,7 +109,7 @@
                 <tbody>
                     <!-- Example data, replace it with dynamic data from PHP -->
                     @foreach($superAddUser as $user)
-                    @if($user->user_type !== 'admin')
+                    {{-- @if($user->user_type !== 'admin') --}}
                     <tr>
                         <td>{{ $user->fname }} {{ $user->lname }}</td>
                         <td>{{ $user->employee_id }}</td>
@@ -142,7 +142,7 @@
                             </div>
                         </td>
                     </tr>
-                    @endif
+                    {{-- @endif --}}
                     @endforeach
 
                 </tbody>

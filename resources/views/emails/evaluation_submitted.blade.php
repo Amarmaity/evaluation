@@ -11,6 +11,7 @@
     <p><strong>Designation:</strong> {{ $evaluationData['designation'] }}</p>
     <p><strong>Submitted By:</strong> {{ $evaluationData['evalutors_name'] }}</p>
 
-    <p>Please log in to the system to view the full evaluation details.</p>
+    {{-- <p>Please log in to the system to view the full evaluation details.</p> --}}
+    <p>Please fill your review for the employee.</p>
 </body>
 </html>

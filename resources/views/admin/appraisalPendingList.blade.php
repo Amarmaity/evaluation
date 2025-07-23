@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Appraisal Dashboard')
+@section('title', 'Pending Appraisal')
 @section('breadcrumb', 'Pending Appraisal')
 @section('page-title', 'Appraisal Section')
 
@@ -35,7 +35,7 @@
 </div>
     <div class="container table-container pending-appraisal-table">
         <div class="table-responsive table-wrapper">
-            <table id="pending-apprasial" class="table table-bordered table-hover main-table">
+            <table id="pending-apprasial" class="table table-bordered table-hover main-table table-view">
                 <thead>
                     <tr>
                         <th>Employee Name</th>

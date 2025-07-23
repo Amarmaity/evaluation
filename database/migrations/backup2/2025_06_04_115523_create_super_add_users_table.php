@@ -21,13 +21,14 @@ return new class extends Migration
             $table->string('employee_id')->unique();
             $table->string('evaluation_purpose');
             $table->string('division');
-            $table->string('manager_name');
-            $table->string('department');
-            $table->string('designation');
-            $table->string('user_type');
+            $table->string('manager_name')->nullable();
+            $table->string('department')->nullable();
+            $table->string('designation')->nullable();
+            $table->string('user_type')->nullable();
             $table->json('user_roles')->nullable();
             $table->decimal('salary', 10, 2);
             $table->string('email')->unique();
+            $table->json('client_id')->nullable();
             $table->string('salary_grade');
             $table->string('password');
             $table->string('company_percentage')->nullable();

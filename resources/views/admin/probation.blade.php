@@ -86,13 +86,6 @@
 
     <div class="client">
         <h1 class="client__heading">Probation Employee Table</h1>
-        <div class="client___item">
-            <input type="search" id="employee_search" name="search" class="form-control client__search" placeholder="Search"
-                aria-label="Search">
-            <button class="client__btn" type="submit">
-                <img src="https://modest-gagarin.74-208-156-247.plesk.page/images/search.png" alt="Search">
-            </button>
-        </div>
 
         <select id="financialYear" class="form-select client__select" name="financial_year" required>
             <option value="" selected>Financial Year</option>
@@ -102,21 +95,29 @@
             <option value="2028-2029">2028-2029</option>
             <option value="2029-2030">2029-2030</option>
         </select>
+
+        <div class="client___item">
+            <input type="search" id="employee_search" name="search" class="form-control client__search" placeholder="Search"
+                aria-label="Search">
+            <button class="client__btn" type="submit">
+                <img src="https://modest-gagarin.74-208-156-247.plesk.page/images/search.png" alt="Search">
+            </button>
+        </div>
     </div>
     <div class="container table-container probation-page">
-        <div class="table-responsive table-wrapper">
-            <table id="employeeTable" class="table table-bordered table-hover main-table probation-table" class="probation-table">
+        <div class="table-responsive table-wrapper"> 
+            <table id="employeeTable" class="table table-bordered table-hover main-table table-view probation-table" class="probation-table">
                 <thead>
                     <tr>
                         <th>Employee Name</th>
                         <th>Employee ID</th>
                         <th>Designation</th>
                         <th>Joining Date</th>
+                        <th>Probation Date</th>
                         <th>Salary</th>
                         <th>Email</th>
                         <th>Financial Year</th>
                         <th>Status</th> <!-- Ensure this column is present -->
-                        <th>Probation Date</th>
                         {{-- <th>Action</th> --}}
                     </tr>
                 </thead>
@@ -127,13 +128,13 @@
                             <td>{{$users->employee_id}}</td>
                             <td>{{$users->designation}}</td>
                             <td>{{$users->dob}}</td>
+                            <td><span class="probation-date-text" id="probationDate{{$users->employee_id}}">
+                                    {{$users->probation_date ?? 'Not Set'}}</span></td>
                             <td>{{$users->salary}}</td>
                             <td>{{$users->email}}</td>
                             <td>{{$users->financial_year}}
                             <td><span class="status-text" id="status{{$users->employee_id}}">
                                     {{$users->employee_status ?? '--'}}</span></td>
-                            <td><span class="probation-date-text" id="probationDate{{$users->employee_id}}">
-                                    {{$users->probation_date ?? 'Not Set'}}</span></td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -153,7 +154,7 @@
                 info: true,
                 lengthChange: true,
                "lengthChange": false,
-                order: [[3, 'desc']],
+                order: [[0, 'asc']],
                 language: {
                     emptyTable: "No employee data available for this financial year"
                 }
