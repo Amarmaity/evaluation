@@ -96,15 +96,26 @@ class ForgotPasswordController extends Controller
                 Session::put('forgot_password_user_type', $user->user_type);
                 Session::put('forgot_password_user_table', 'SuperAddUser');
                 Session::put('forgot_password_login_url', route('user-login'));
+                
             } elseif ($user = SuperUserTable::where('email', $email)->first()) {
                 Session::put('forgot_password_user_type', $user->user_type);
                 Session::put('forgot_password_user_table', 'SuperUserTable');
                 Session::put('forgot_password_login_url', route('user-login'));
-            } elseif ($user = AllClient::where('client_email', $email)->first()) {
+            }
+            // elseif ($user = AllClient::where('client_email', $email)->first()) {
+            //     Session::put('forgot_password_user_type', $user->user_type);
+            //     Session::put('forgot_password_user_table', 'AllClient');
+            //     Session::put('forgot_password_login_url', route('all-user-login'));
+            //     return back()->with('error', 'User not found.');
+            // }
+            elseif ($user = AllClient::where('client_email', $email)->first()) {
                 Session::put('forgot_password_user_type', $user->user_type);
                 Session::put('forgot_password_user_table', 'AllClient');
                 Session::put('forgot_password_login_url', route('all-user-login'));
-                return back()->with('error', 'User not found.');
+
+                Session::put('forgot_password_redirect_url', url()->previous());
+
+                return redirect()->route('forgot-password.reset');
             }
 
             Session::put('forgot_password_redirect_url', url()->previous());
@@ -119,7 +130,7 @@ class ForgotPasswordController extends Controller
     {
         $request->validate([
             'password' => 'required|string|min:4|confirmed'
-        ],['password.confirmed' => 'Passwords do not match.',]);
+        ], ['password.confirmed' => 'Passwords do not match.',]);
 
         $email = Session::get('forgot_password_email');
         $userTable = Session::get('forgot_password_user_table');

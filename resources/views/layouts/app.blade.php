@@ -13,6 +13,7 @@
         rel="stylesheet">
     <link href="{{ asset('css/evaluation-form.css') }}?v={{ time() }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}?v={{ time() }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/adminlte.css') }}">
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="Sat, 01 Jan 2000 00:00:00 GMT">

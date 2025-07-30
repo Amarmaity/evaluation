@@ -204,6 +204,17 @@
                     <img src="{{ asset('images/evalon-black.png') }}" alt="Delostyle Logo" class="mw-100">
                 </div>
                 <h1>Sign in to your Evalon Panel</h1>
+                @if(session('success'))
+                    <div id="alert-message" class="alert alert-success text-center">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div id="alert-message" class="alert alert-danger text-center">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <form method="post" autocomplete="off" id="login-form" class="login__page--form">
                     @csrf
 
@@ -226,11 +237,11 @@
 
                             <option value="Super User">Super User</option>
                             @if($superUser == null)
-                            <option value="admin">Admin</option>
-                            <option value="hr">HR</option>
-                            <option value="users">Users</option>
-                            <option value="manager">Manager</option>
-                            <option value="client">Client</option>
+                                <option value="admin">Admin</option>
+                                <option value="hr">HR</option>
+                                <option value="users">Users</option>
+                                <option value="manager">Manager</option>
+                                <option value="client">Client</option>
                             @endif
                         </select>
                     </div>
@@ -259,7 +270,8 @@
                         <button type="submit" class="btn__theme" id="send-otp-btn">Send OTP</button>
                         <button type="submit" class="btn__theme" id="login-btn" style="display: none;">Verify
                             OTP</button>
-                        <button type="button" class="btn__theme resend__otp" id="resend-otp-btn" style="display: none;">Resend
+                        <button type="button" class="btn__theme resend__otp" id="resend-otp-btn"
+                            style="display: none;">Resend
                             OTP</button>
                     </div>
 
@@ -293,7 +305,7 @@
             }
         }
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             const otpCooldownSeconds = 30;
             let resendTimeout;
             let isOtpSending = false;
@@ -338,7 +350,7 @@
                         user_type: userType,
                         password
                     },
-                    success: function(response) {
+                    success: function (response) {
                         hideBtnLoader("#send-otp-btn");
                         alert(response.message);
 
@@ -354,7 +366,7 @@
                             $("#send-otp-btn, #resend-otp-btn").prop("disabled", false);
                         }
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         hideBtnLoader("#send-otp-btn");
                         alert("Failed to send OTP: " + (xhr.responseJSON?.message || "Server Error"));
                         isOtpSending = false;
@@ -363,7 +375,7 @@
                 });
             }
 
-            $("#send-otp-btn").click(function() {
+            $("#send-otp-btn").click(function () {
                 const email = $("#email").val();
                 const userType = $("#user_type_dropdown").val();
                 const password = $("#password").val();
@@ -377,12 +389,12 @@
                 sendOtp(false);
             });
 
-            $("#resend-otp-btn").click(function() {
+            $("#resend-otp-btn").click(function () {
                 showBtnLoader(this);
                 sendOtp(true);
             });
 
-            $("#login-form").submit(function(e) {
+            $("#login-form").submit(function (e) {
                 e.preventDefault();
                 const email = $("#email").val();
                 const otp = $("#otp").val();
@@ -401,7 +413,7 @@
                             email,
                             otp
                         },
-                        success: function(response) {
+                        success: function (response) {
                             hideBtnLoader("#login-btn");
                             alert(response.message);
                             if (response.status === 'success') {
@@ -409,7 +421,7 @@
                                 window.location.href = response.redirect;
                             }
                         },
-                        error: function(xhr) {
+                        error: function (xhr) {
                             hideBtnLoader("#login-btn");
                             alert("OTP verification failed: " + (xhr.responseJSON?.message || "Server Error"));
                         }
@@ -419,6 +431,18 @@
                 }
             });
         });
+
+
+
+        // Auto-refresh page after 5 seconds if alert is present
+    window.addEventListener('DOMContentLoaded', function () {
+        const alertBox = document.getElementById('alert-message');
+        if (alertBox) {
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        }
+    });
     </script>
 
 

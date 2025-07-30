@@ -32,7 +32,7 @@
         </div>
 
         <!-- Show success or error message -->
-        @if(session('success'))
+        {{-- @if(session('success'))
             <div class="alert alert-success text-center">
                 {{ session('success') }}
             </div>
@@ -41,7 +41,7 @@
             <div class="alert alert-danger text-center">
                 {{ session('error') }}
             </div>
-        @endif
+        @endif --}}
 
         <form action="{{ route('forgot-password.reset') }}" method="POST">
             @csrf
