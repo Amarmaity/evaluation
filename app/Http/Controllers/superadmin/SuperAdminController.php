@@ -4,15 +4,15 @@ namespace App\Http\Controllers\superadmin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\OtpMail;
+use App\Mail\SuperUserNotification;
 use App\Models\AdminReviewTable;
 use App\Models\AllClient;
-use App\Models\ApprisalTable;
 use App\Models\ClientReviewTable;
-use App\Models\ClientReviewTables;
 use App\Models\evaluationTable;
 use App\Models\FinancialData;
 use App\Models\HrReviewTable;
 use App\Models\ManagerReviewTable;
+use App\Models\PendingUser;
 use App\Models\SuperAddUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Str;
 
 
 
@@ -35,22 +35,126 @@ class SuperAdminController extends Controller
         return view("admin/loginForm");
     }
 
+
     public function testPageShow()
     {
         return view("test");
     }
 
+
+
+    // public function insertData(Request $request)
+    // {
+    //     $superUsers = SuperUserTable::where('user_type', 'Super User')->get();
+
+    //      foreach ($superUsers as $user) {
+    //     Mail::to($user->email)->send(new SuperUserNotification($request->input('email')));
+    // }
+
+    //     $data = [
+    //         'email' => $request->input('email'),
+    //         'user_type' => $request->input('user_type'),
+    //         'password' => Hash::make($request->input('password')),
+    //     ];
+
+    //     $request = SuperUserTable::insert($data);
+
+    //     return response()->json(['message' => 'Data inserted and emails sent.']);
+    // }
+
+
+
     public function insertData(Request $request)
-    {
+{
+    // Generate a token for approval link
+    $token = Str::random(40);
 
-        $data = [
-            'email' => $request->input('email'),
-            'user_type' => $request->input('user_type'),
-            'password' => Hash::make($request->input('password')),
-        ];
+    // Save to pending_users table
+    $pending = PendingUser::create([
+        'name' => $request->input('name'),
+        'email' => $request->input('email'),
+        'user_type' => $request->input('user_type'),
+        'password' => Hash::make($request->input('password')),
+        'token' => $token,
+    ]);
 
-        $request = SuperUserTable::insert($data);
+    // Get Super Users (from users table where user_type = 'Super User')
+    $superUsers = SuperUserTable::where('user_type', 'Super User')->get();
+
+    // Send email with approval link
+    foreach ($superUsers as $superUser) {
+        Mail::to($superUser->email)->send(new SuperUserNotification($pending));
     }
+
+    return response()->json(['message' => 'Awaiting Super User approval.']);
+}
+
+
+
+
+// public function approveUser($token)
+// {
+//     //  dd("Function is being called with token: $token");
+
+//     $pendingUser = PendingUser::where('token', $token)->first();
+
+//     if (!$pendingUser) {
+//         return response()->json(['message' => 'Invalid or expired token.'], 404);
+//     }
+
+//     // Insert into users table
+//     SuperUserTable::create([
+//         'email' => $pendingUser->email,
+//         'password' => $pendingUser->password,
+//         'email_verified_at' => now(),
+//         'user_type' => $pendingUser->user_type,
+//     ]);
+
+//     // Delete from pending_users
+//     $pendingUser->delete();
+
+//     return response()->json(['message' => 'User approved and added to system.']);
+// }
+public function approveUser($token)
+{
+    $pendingUser = PendingUser::where('token', $token)->first();
+
+    if (!$pendingUser) {
+        return response("<h3>Invalid or expired approval link.</h3>", 404)
+               ->header('Content-Type', 'text/html');
+    }
+
+    SuperUserTable::create([
+        'email' => $pendingUser->email,
+        'password' => $pendingUser->password,
+        'user_type' => $pendingUser->user_type,
+    ]);
+
+    $pendingUser->delete();
+
+    return response("
+    <html>
+        <head><title>Approval Success</title></head>
+        <body style='font-family:sans-serif; text-align:center; padding-top:50px;'>
+            <h2>User has been successfully approved by Super Admin and added to the system.</h2>
+            <p>You may now close this tab.</p>
+        </body>
+    </html>
+", 200)->header('Content-Type', 'text/html');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function loginAutenticacao(Request $request)
     {

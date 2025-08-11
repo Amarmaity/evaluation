@@ -164,10 +164,10 @@
 
 
                                     {{-- Evaluation Purpose --}}
-                                    <div class="client-hide">
+                                    <div class="client-hide" style="display: none;>
                                         <label for="Evaluation Purpose" class="forms-label">Evaluation Purpose</label>
                                         <select class="form-control" id="evaluation_purpose" name="evaluation_purpose">
-                                            <option value="" selected disabled>Select Purpose</option>
+                                            <option value="" selected>Select Purpose</option>
                                             <option value="Appraisal" selected>Appraisal</option>
                                         </select>
                                     </div>

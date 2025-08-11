@@ -29,13 +29,12 @@ use Illuminate\Http\Request;
 //     return view('welcome');
 // });
 
-Route::get('/input-evaluation/{employee_id?}', [HomeController::class, 'index'])->name('input-evaluation');
 Route::post('/send-otp', [HomeController::class, 'sendOtp'])->name('evaluation-send-otp');
 Route::post('/evaluation-verify-otp', [HomeController::class, 'evaluationverifyOtp'])->name('evaluation-verify-otp');
 Route::post('/insert-evaluation', [HomeController::class, 'submitEvaluation'])->name('insert-data-evaluation');
 
 //Login
-
+Route::get('/approve-user/{token}', [SuperAdminController::class, 'approveUser']);
 
 
 //Forget Password
@@ -82,34 +81,41 @@ Route::group(['middleware' => DissableBackBtn::class], function () {
         Route::get('/get-active-users', [SuperAdminController::class, 'getActiveUsers'])->name('active-user');
         Route::get('/appraisal', [SuperAdminController::class, 'appraisalView'])->name('appraisal-view');
         Route::get('/financial', [SuperAdminController::class, 'financialView'])->name('financial.view');
+        Route::get('/probation-period',[SuperAdminController::class,'getProbationPeriod'])->name('get-probation');
+        Route::get('/financial-view-table',[FinancialYearController::class,'financialTableView'])->name('financial-view-tables');
+        Route::get('/appraisal-pending',[SuperAdminController::class,'getPendingAppraisalView'])->name('get-pending-apprasil');
+        Route::get('/setting',[FinancialYearController::class,'getSettingView'])->name('setting-view');
+        Route::get('/view-super-admin-dashboard', [SuperAdminController::class, 'indexSuperAdminDashBoard'])->name('super-admin-view');
+
+        Route::get('/edit-user/{id}',[SuperAdminController::class, 'editUserView'])->name('edit-user');
+        Route::get('/employee/details/{emp_id}', [SuperAdminController::class, 'viewDetailsAll'])->name('employee.details');
+        Route::get('/user/details/hr/{employee_id}',[allUserController::class,'showDetailsHr'])->name('user-hr-details');
+        Route::get('/evaluation-view/{employee_id}',[allUserController::class,'showEvaluationDetails'])->name('user-report-view-evaluation');
+        Route::get('/input-evaluation/{employee_id?}', [HomeController::class, 'index'])->name('input-evaluation');
+        Route::get('/review-reports/{emp_id}', [allUserController::class, 'reviewUserReport'])->name('get-review-reports');
+        Route::get('/user/details/admin/{employee_id}', [allUserController::class, 'showDetailsAdmin'])->name('user-admin-details');
+        Route::get('/manager-review-list',[allUserController::class,'getManagerReviewList'])->name('manager-review-list');
+        Route::get('/user/details/manager/{employee_id}',[allUserController::class,'showDetailsManager'])->name('user-manager-details');
+        Route::get('/user/details/client/{employee_id}',[allUserController::class,'showDetailsClient'])->name('user-client-details');
+
        // Route::post('/loged-out', [addUserController::class, 'logedOut'])->name('logged-Out');
     });
 });
 
-// Route::get('/', [SuperAdminController::class, 'index'])->name('login-index');
-Route::get('/view-super-admin-dashboard', [SuperAdminController::class, 'indexSuperAdminDashBoard'])->name('super-admin-view');
+
 Route::get('/admin/super-admin-dashboard', [SuperAdminController::class, 'showDashboard'])->name('super-admin-dashboard');
 
 //User's login route
 Route::get('/', [allUserController::class, 'indexUserLogin'])->name('all-user-login');
 Route::post('/log-out-users', [allUserController::class, 'userLogOut'])->name('logout-users');
-//User Login
-// Route::get("/User's-Login",[\App\Http\Controllers\userController\allUserController::class,"indexLoginUser"])->name("user's-login-page");
+
+
 Route::post('/user-login', [allUserController::class, 'loginUserAutenticacaon'])->name('log-in');
 Route::post('/verify-otp-login-users', [allUserController::class, 'loginUserVerifyOtp'])->name('verify-otp-login-users');
 
 
 //User Review Reports
-Route::get('/review-reports/{emp_id}', [allUserController::class, 'reviewUserReport'])->name('get-review-reports');
 Route::get('/search-managers', [SuperAdminController::class, 'getManager'])->name('get.manager');
-
-
-
-
-
-
-
-
 
 
 
@@ -124,9 +130,6 @@ Route::post('/submit-client-review', [allUserController::class, 'clientReviewSto
 Route::get('/client-search-user',[allUserController::class,'clientSearch'])->name('client-search');
 
 
-//client
-// Route::get('/client-dashboard', [allUserController::class, 'viewClientDashBoard'])->name('client-dashboard');
-// Route::get('/client-review-section', [allUserController::class, 'clientReviewSection'])->name('client-review');
 
 //Apprisal 
 Route::get('/apprisal-data', [SuperAdminController::class, 'getAppraisalData'])->name('apprisal.data');
@@ -135,19 +138,17 @@ Route::post('/toggle-status/{user_type}/{identifier}', [SuperAdminController::cl
 Route::post('/toggle-status-client/{id}', [SuperAdminController::class, 'clientToggleStatus'])->name('client.toggle.status');
 
 Route::get('/search-employee', [SuperAdminController::class, 'searchEmployee']);
-// Route::post('/toggle-status/{id}', [SuperAdminController::class, 'toggleStatus']);
+
 
 //Finalcial
 Route::get('/financial-data', [SuperAdminController::class, 'getFinancialData'])->name('financial.data');
 Route::post('/financial-data-store', [FinancialYearController::class, 'storeFinancialData'])->name('financial-data-store');
-Route::get('/financial-view-table',[FinancialYearController::class,'financialTableView'])->name('financial-view-tables');
 Route::get('/super/user/search', [FinancialYearController::class, 'searchEmployee'])->name('super.user.search.bar');
 
 
 
 
 
-Route::get('/employee/details/{emp_id}', [SuperAdminController::class, 'viewDetailsAll'])->name('employee.details');
 Route::get('/hr/review/details/{emp_id}', [SuperAdminController::class, 'getSuperAdminHrReview'])->name('hr.review.details');
 Route::get('/admin/review/details/{emp_id}', [SuperAdminController::class, 'getSuperAdminAdminReview'])->name('admin.review.details');
 Route::get('/manager/review/details/{emp_id}', [SuperAdminController::class, 'getSuperAdminManagerReview'])->name('manager.review.details');
@@ -167,38 +168,19 @@ Route::get('report/{reportType}/{emp_id}', [allUserController::class, 'loadRepor
 
 
 Route::get('/hr-review-list',[allUserController::class,'getHrReviewsList'])->name('hr-review-list');
-Route::get('/user/details/hr/{employee_id}',[allUserController::class,'showDetailsHr'])->name('user-hr-details');
 Route::get('/admin-review-list',[allUserController::class,'getAdminReviewList'])->name('admin-review-list');
-Route::get('/user/details/admin/{employee_id}', [allUserController::class, 'showDetailsAdmin'])->name('user-admin-details');
-Route::get('/manager-review-list',[allUserController::class,'getManagerReviewList'])->name('manager-review-list');
-Route::get('/user/details/manager/{employee_id}',[allUserController::class,'showDetailsManager'])->name('user-manager-details');
 Route::get('/client-review-list',[allUserController::class,'getClientReviewList'])->name('client-review-list');
-Route::get('/user/details/client/{employee_id}',[allUserController::class,'showDetailsClient'])->name('user-client-details');
 //Evaluation View
-Route::get('/evaluation-view/{employee_id}',[allUserController::class,'showEvaluationDetails'])->name('user-report-view-evaluation');
 Route::post('/evaluation-report-submit/{emp_id}',[HomeController::class,'submitEvaluationDirector'])->name('director-submit-from');
 
 
-Route::get('/setting',[FinancialYearController::class,'getSettingView'])->name('setting-view');
 Route::post('save-apprisal',[FinancialYearController::class,'setApprisalPercentage'])->name('submit-apprisal-all');
 Route::put('/update-financial-year/{id}', [FinancialYearController::class, 'update'])->name('update-financial-year');
-Route::get('/probation-period',[SuperAdminController::class,'getProbationPeriod'])->name('get-probation');
 
-
-
-
-
-// Routes for updating status and probation date
-// Route::post('/employee/{id}/status', [SuperAdminController::class, 'updateStatus']);
 
 Route::post('/employee/{employeeId}/status', [SuperAdminController::class, 'updateStatus']);
 Route::post('/employee/{employeeId}/probation-date', [SuperAdminController::class, 'updateProbationDate']);
 Route::post('/check-duplicate-evaluation', [HomeController::class, 'checkDuplicateSubmission'])->name('check-duplicate-evaluation');
-
-
-//Appraisal peding list
-Route::get('/appraisal-pending',[SuperAdminController::class,'getPendingAppraisalView'])->name('get-pending-apprasil');
-
 
 
 //Financila year dropdown 
@@ -207,20 +189,11 @@ Route::post('/financial/filter-financial-year', [FinancialYearController::class,
 Route::post('/filter-by-financial-year', [SuperAdminController::class, 'filterByFinancialYear'])->name('appraisal.filter.by.year');
 Route::post('/employees/filter-financial-year-employee-review',[SuperAdminController::class,'filterByFinancialYearEmployeeReview'])->name('employees-filter-financial-year-employee-review');
 
-
-// In routes/web.php
-// Route::get('/validate-financial-year', [SuperAdminController::class, 'validateFinancialYear']);
-
-
 //test mail
 // Route::get('/test-email', [\App\Http\Controllers\superadmin\SuperAdminController::class, 'testEmail']);
 
-
-//User Review Report Handle 
-// routes/web.php
 Route::get('/employee/review-scores', [allUserController::class, 'getReviewScores'])->name('employee.review-scores');
 Route::post('/employee/review-score/super-user',[SuperAdminController::class,'getReviewScoresSuperAdmin'])->name('employee.review-score-super-user');
-//Get Manager Name is Add User Dashboard
 Route::get('/get-managers',[addUserController::class,'getManagers'])->name('get.managers');
 
 //Mail Anniversaries for employee
@@ -240,7 +213,6 @@ Route::post('/save-new-client', [SuperAdminController::class, 'createClient'])->
 Route::get('/get-clients', [SuperAdminController::class, 'getClients'])->name('get.clients');
 
 
-Route::get('/edit-user/{id}',[SuperAdminController::class, 'editUserView'])->name('edit-user');
 Route::put('/update-user/{id}', [SuperAdminController::class, 'updateUser'])->name('update-user');
 
 //Search edit

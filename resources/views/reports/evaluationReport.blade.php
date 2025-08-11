@@ -112,10 +112,6 @@
                         <th>Salary Grade</th>
                         <td>{{ $user->salary_grade }}</td>
                     </tr>
-                    {{-- <tr>
-                        <th>Department</th>
-                        <td>{{ $user->department }}</td>
-                    </tr> --}}
                     <tr>
                         <th>Evaluation Purpose</th>
                         <td>{{ $user->evaluation_purpose }}</td>
@@ -142,69 +138,76 @@
 
                 <!-- Ratings and Comments -->
             <div class="table-responsive">
-                 <table class="table span-tage table-bordered">
+                 <table class="table table-bordered">
                      <thead>
                     <tr>
-                        <th class="span-data">Field <span>Rating</span></th>
+                        <th>Field</th>
+                        <th>Rating</th>
                         <th>Comments</th>
                     </tr>
                 </thead>
                 <tr>
-                    <td class="span-data">1. Accuracy, neatness and timeliness of work  <span>({{ $user->accuracy_neatness }}/5)</span></td>
+                    <td>1. Accuracy, neatness and timeliness of work</td>
+                    <td>({{ $user->accuracy_neatness }}/5)</td>
                     <td>{{ $user->comments_accuracy }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">2. Adherence to duties and procedures in Job Description and Work Instructions <span>({{ $user->adherence }}/5)</span></td>
+                    <td>2. Adherence to duties and procedures in Job Description and Work Instructions </td>
+                    <td>({{ $user->adherence }}/5)</td>
                     <td>{{ $user->comments_adherence }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">3. Synchronization with organizations/functional goals <span>({{ $user->synchronization }}/5)</span></td>
+                    <td>3. Synchronization with organizations/functional goals </td>
+                    <td>({{ $user->synchronization }}/5)</td>
                     <td>{{ $user->comments_synchronization }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">Quality of Work Total Rating <span>{{ $user->qualityworktotalrating }}</span></td>
-                    {{-- <td></td> --}}
+                    <td >Quality of Work Total Rating </td>
+                    <td>{{ $user->qualityworktotalrating }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">1. Punctuality to workplace <span>({{ $user->punctuality }}/5)</span></td>
+                    <td>1. Punctuality to workplace </td>
+                    <td>({{ $user->punctuality }}/5)</td>
                     <td>{{ $user->comments_punctuality }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">2. Attendance <span>({{ $user->attendance }}/5)</span></td>
+                    <td>2. Attendance </td>
+                    <td>({{ $user->attendance }}/5)</td>
                     <td>{{ $user->comments_attendance }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">3. Does the employee stay busy, look for things to do, take initiatives at workplace <span>({{ $user->initiatives_at_workplace }}/5)</span></td>
+                    <td>3. Does the employee stay busy, look for things to do, take initiatives at workplace </td>
+                    <td>({{ $user->initiatives_at_workplace }}/5)</td>
                     <td>{{ $user->comments_initiatives }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">4. Submits reports on time and meets deadlines <span>({{ $user->submits_reports }}/5)</span></td>
+                    <td>4. Submits reports on time and meets deadlines </td>
+                    <td>({{ $user->submits_reports }}/5)</td>
                     <td>{{ $user->comments_submits_reports }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">Work Habits Total Rating <span>{{ $user->work_habits_rating }}</span></td>
-                    {{-- <td></td> --}}
+                    <td >Work Habits Total Rating </td>
+                    <td>{{ $user->work_habits_rating }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">1. Skill and ability to perform job satisfactorily <span>({{ $user->skill_ability }}/5)</span></td>
+                    <td>1. Skill and ability to perform job satisfactorily </td>
+                    <td>({{ $user->skill_ability }}/5)</td>
                     <td>{{ $user->comments_skill_ability }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">2. Shown interest in learning and improving <span>({{ $user->learning_improving }}/5)</span></td>
+                    <td >2. Shown interest in learning and improving </td>
+                    <td>({{ $user->learning_improving }}/5)</td>
                     <td>{{ $user->comments_learning_improving }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">3. Problem solving ability <span>({{ $user->problem_solving_ability }}/5)</span></td>
+                    <td>3. Problem solving ability</td>
+                    <td>({{ $user->problem_solving_ability }}/5)</td>
                     <td>{{ $user->comments_problem_solving }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">Job Knowledge Total Rating <span>{{ $user->jk_total_rating }}</span></td>
-                    {{-- <td></td> --}}
+                    <td>Job Knowledge Total Rating </td>
+                    <td>{{ $user->jk_total_rating }}</td>
                 </tr>
-                {{-- <tr>
-                    <td>Recommendation</td>
-                    <td>{{ $user->recomendation }}</td>
-                </tr> --}}
                 <tr>
                     <td>Evaluator's Name</td>
                     <td>{{ $user->evalutors_name }}</td>
@@ -222,63 +225,74 @@
                     <td>{{ $user->evaluator_signatur_date }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">1. Responds and contributes to team efforts <span>({{ $user->respond_contributes }}/5)</span></td>
+                    <td>1. Responds and contributes to team efforts </td>
+                    <td>({{ $user->respond_contributes }}/5)</td>
                     <td>{{ $user->comments_respond_contributes }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">2. Responds positively to suggestions, instructions, and criticism <span>({{ $user->responds_positively }}/5)</span></td>
+                    <td>2. Responds positively to suggestions, instructions, and criticism </td>
+                    <td>({{ $user->responds_positively }}/5)</td>
                     <td>{{ $user->comments_responds_positively }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">3. Keeps supervisor informed of all details <span>({{ $user->supervisor }}/5)</span></td>
+                    <td>3. Keeps supervisor informed of all details </td>
+                    <td>({{ $user->supervisor }}/5)</td>
                     <td>{{ $user->comments_supervisor }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">4. Adapts well to changing circumstances <span>({{ $user->adapts_changing }}/5)</span></td>
+                    <td>4. Adapts well to changing circumstances </td>
+                    <td>({{ $user->adapts_changing }}/5)</td>
                     <td>{{ $user->comments_adapts_changing }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">5. Seeks feedback to improve <span>({{ $user->seeks_feedback }}/5)</span></td>
+                    <td>5. Seeks feedback to improve </td>
+                    <td>({{ $user->seeks_feedback }}/5)</td>
                     <td>{{ $user->comments_seeks_feedback }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">Interpersonal Relations Total Rating <span>{{ $user->ir_total_rating }}</span></td>
-                    {{-- <td></td> --}}
+                    <td>Interpersonal Relations Total Rating </td>
+                    <td>{{ $user->ir_total_rating }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">1. Aspirant to climb up the ladder, accepts challenges, new responsibilities, and roles <span>({{ $user->challenges }}/10)</span>   </td>
+                    <td>1. Aspirant to climb up the ladder, accepts challenges, new responsibilities, and roles</td>
+                    <td>({{ $user->challenges }}/10)</td>
                     <td>{{ $user->comments_challenges }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">2. Innovative thinking - contribution to organizations, functions, and personal growth <span>({{ $user->personal_growth }}/10)</span></td>
+                    <td>2. Innovative thinking - contribution to organizations, functions, and personal growth </td>
+                    <td>({{ $user->personal_growth }}/10)</td>
                     <td>{{ $user->comments_personal_growth }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">3. Work motivation <span>({{ $user->work_motivation }}/5)</span></td>
+                    <td>3. Work motivation </td>
+                    <td>({{ $user->work_motivation }}/5)</td>
                     <td><br> {{ $user->comments_work_motivation }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">Leadership Skill Total Rating <span>{{ $user->leadership_rating }}</span></td>
-                    {{-- <td></td> --}}
+                    <td>Leadership Skill Total Rating </td>
+                    <td>{{ $user->leadership_rating }}</td>
                 </tr>
                 <tr>
                     <td>1. Employee performance and learning is unsatisfactory and is failing to improve at a
                         satisfactory
-                        rate <span>{{ $user->progress_unsatisfactory }}</span></td>
+                        rate</td>
+                    <td><span>{{ $user->progress_unsatisfactory }}</span></td>
                     <td>{{ $user->comments_unsatisfactory }}</td>
                 </tr>
                 <tr>
-                    <td>2. Employee performance and learning is acceptable and is improving at a satisfactory rate <span>{{ $user->progress_acceptable }}</span>
+                    <td>2. Employee performance and learning is acceptable and is improving at a satisfactory rate
                     </td>
+                    <td> <span>{{ $user->progress_acceptable }}</span></td>
                     <td> {{ $user->comments_acceptable }}</td>
                 </tr>
                 <tr>
-                    <td>3. Employee has successfully demonstrated outstanding overall performance <span>{{ $user->progress_outstanding }}</span></td>
+                    <td>3. Employee has successfully demonstrated outstanding overall performance </td>
+                    <td><span>{{ $user->progress_outstanding }}</span></td>
                     <td>{{ $user->comments_outstanding }}</td>
                 </tr>
                 <tr>
-                    <td class="span-data">Total score in evaluation: <span>{{$user->total_scoring_system}}</span></td>
-                    {{-- <td></td> --}}
+                    <td>Total score in evaluation: </td>
+                    <td >{{$user->total_scoring_system}}</td>
                 </tr>
                 {{-- @if(in_array(Session::get('user_type'), ['admin', 'hr', 'manage', 'Super User', 'users']))
                     <tr>

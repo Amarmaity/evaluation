@@ -80,82 +80,80 @@
             </table>
         </div>
 
-        <div class="mt-5 second-table span-tage">
+        <div class="mt-5 second-table">
             <div class="table-wrapper">
                 <table id="employeeEvaluationTable" class="table table-bordered table-hover main-table">
                     <thead>
                         <tr>
-                            <th class="span-data">Field <span>Rating</span></th>
+                            <th>Field</th>
+                            <th>Rating</th>
                             <th> Comments</th>
                         </tr>
                     </thead>
 
                     @foreach($eval as $evaluation)
                         <tr>
-                            <td class="span-data">1. Accuracy, neatness and timeliness of work
-                                <span>({{ $evaluation->accuracy_neatness }} /5)</span></td>
+                            <td>1. Accuracy, neatness and timeliness of work</td>
+                            <td>({{ $evaluation->accuracy_neatness }} /5)</td>
                             <td>{{ $evaluation->comments_accuracy }}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">2. Adherence to duties and procedures in Job Description and Work Instructions
-                                <span>({{ $evaluation->adherence }}/5)</span></td>
+                            <td>2. Adherence to duties and procedures in Job Description and Work Instructions</td>
+                            <td>({{ $evaluation->adherence }}/5)</td>
                             <td>{{ $evaluation->comments_adherence }}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">3. Synchronization with organizations/functional goals
-                                <span>({{ $evaluation->synchronization }} /5)</span></td>
+                            <td>3. Synchronization with organizations/functional goals</td>
+                            <td>({{ $evaluation->synchronization }} /5)</td>
                             <td>{{ $evaluation->comments_synchronization }}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">Quality of Work Total Rating <span>{{ $evaluation->qualityworktotalrating }}</span></td>
-                            {{-- <td></td> --}}
+                            <td>Quality of Work Total Rating</td>
+                            <td>{{ $evaluation->qualityworktotalrating }}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">1. Punctuality to workplace <span>({{ $evaluation->punctuality }} /5)</span>
-                            </td>
+                            <td>1. Punctuality to workplace</td>
+                            <td>({{ $evaluation->punctuality }} /5)</td>
                             <td>{{ $evaluation->comments_punctuality }}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">2. Attendance <span>({{ $evaluation->attendance }} /5)</span></td>
+                            <td>2. Attendance</td>
+                            <td>({{ $evaluation->attendance }} /5)</td>
                             <td>{{ $evaluation->comments_attendance }}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">3. Does the employee stay busy, look for things to do, take initiatives at
-                                workplace <span>({{ $evaluation->initiatives_at_workplace }} /5)</span></td>
+                            <td>3. Does the employee stay busy, look for things to do, take initiatives at workplace </td>
+                            <td>({{ $evaluation->initiatives_at_workplace }} /5)</td>
                             <td>{{ $evaluation->comments_initiatives }}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">4. Submits reports on time and meets deadlines
-                                <span>({{ $evaluation->submits_reports }} /5)</span></td>
+                            <td>4. Submits reports on time and meets deadlines</td>
+                            <td>({{ $evaluation->submits_reports }} /5)</td>
                             <td>{{ $evaluation->comments_submits_reports }}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">Work Habits Total Rating <span>{{ $evaluation->work_habits_rating }}</span></td>
-                            {{-- <td></td> --}}
+                            <td>Work Habits Total Rating</td>
+                            <td>{{ $evaluation->work_habits_rating }}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">1. Skill and ability to perform job satisfactorily
-                                <span>({{ $evaluation->skill_ability }}/5)</span></td>
+                            <td>1. Skill and ability to perform job satisfactorily</td>
+                            <td>({{ $evaluation->skill_ability }}/5)</td>
                             <td>{{ $evaluation->comments_skill_ability }}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">2. Shown interest in learning and improving
-                                <span>({{ $evaluation->learning_improving }}/5)</span></td>
+                            <td>2. Shown interest in learning and improving</td>
+                            <td>({{ $evaluation->learning_improving }}/5)</td>
                             <td> {{ $evaluation->comments_learning_improving }}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">3. Problem solving ability
-                                <span>({{ $evaluation->problem_solving_ability }}/5)</span></td>
+                            <td>3. Problem solving ability</td>
+                            <td>({{ $evaluation->problem_solving_ability }}/5)</td>
                             <td>{{ $evaluation->comments_problem_solving }}</td>
                         </tr>
                         <tr>
-                            <td>Job Knowledge Total Rating <span>{{ $evaluation->jk_total_rating }}</span></td>
-                            {{-- <td></td> --}}
+                            <td>Job Knowledge Total Rating</td>
+                            <td>{{ $evaluation->jk_total_rating }}</td>
                         </tr>
-                        {{-- <tr>
-                            <td>Recommendation</td>
-                            <td>{{ $evaluation->recomendation }}</td>
-                        </tr> --}}
                         <tr>
                             <td>Evaluator's Name</td>
                             <td>{{ $evaluation->evalutors_name }}</td>
@@ -170,73 +168,72 @@
                             <td>{{ $evaluation->evaluator_signatur_date }}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">1. Responds and contributes to team efforts
-                                <span>({{$evaluation->respond_contributes}}/5)</span></td>
+                            <td>1. Responds and contributes to team efforts</td>
+                            <td>({{$evaluation->respond_contributes}}/5)</td>
                             <td>{{$evaluation->comments_respond_contributes}}
                         </tr>
                         <tr>
-                            <td class="span-data">2. Responds positively to suggestions, instructions, and criticism
-                                <span>({{$evaluation->responds_positively}}/5)</span></td>
+                            <td>2. Responds positively to suggestions, instructions, and criticism</td>
+                            <td>({{$evaluation->responds_positively}}/5)</td>
                             <td>{{$evaluation->comments_responds_positively}}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">3. Keeps supervisor informed of all details <span>({{$evaluation->supervisor}}
-                                    /5)</span></td>
+                            <td>3. Keeps supervisor informed of all details</td>
+                            <td>({{$evaluation->supervisor}}/5)</td>
                             <td>{{$evaluation->comments_supervisor}}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">4. Adapts well to changing circumstances
-                                <span>({{$evaluation->adapts_changing}}/5)</span></td>
+                            <td>4. Adapts well to changing circumstances</td>
+                            <td>({{$evaluation->adapts_changing}}/5)</td>
                             <td>{{$evaluation->comments_adapts_changing}}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">5. Seeks feedback to improve <span>({{$evaluation->seeks_feedback}}/5)</span>
-                            </td>
+                            <td>5. Seeks feedback to improve</td>
+                            <td>({{$evaluation->seeks_feedback}}/5)</td>
                             <td>{{$evaluation->comments_seeks_feedback}}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">Interpersonal Relations Total Rating <span>{{$evaluation->ir_total_rating}}</span></td>
-                            {{-- <td></td> --}}
+                            <td>Interpersonal Relations Total Rating</td>
+                            <td>{{$evaluation->ir_total_rating}}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">1. Aspirant to climb up the ladder, accepts challenges, new responsibilities,
-                                and roles <span>({{$evaluation->challenges}}/10)</span></td>
+                            <td>1. Aspirant to climb up the ladder, accepts challenges, new responsibilities, and roles</td>
+                            <td>({{$evaluation->challenges}}/10)</td>
                             <td>{{$evaluation->comments_challenges}}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">2. Innovative thinking - contribution to organizations, functions, and
-                                personal growth <span>({{$evaluation->personal_growth}}/10)</span></td>
+                            <td>2. Innovative thinking - contribution to organizations, functions, and personal growth</td>
+                            <td>({{$evaluation->personal_growth}}/10)</td>
                             <td>{{$evaluation->comments_personal_growth}}</td>
                         </tr>
                         <tr>
-                            <td>3. Work motivation <span>({{$evaluation->work_motivation}} /5)</span></td>
+                            <td>3. Work motivation</td>
+                            <td>({{$evaluation->work_motivation}} /5)</td>
                             <td>{{$evaluation->comments_work_motivation}}
 
                         </tr>
                         <tr>
-                            <td class="span-data">Leadership Skill Total Rating <span>{{$evaluation->leadership_rating}}</span></td>
-                            {{-- <td></td> --}}
+                            <td>Leadership Skill Total Rating</td>
+                            <td>{{$evaluation->leadership_rating}}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">1. Employee performance and learning is unsatisfactory and is failing to
-                                improve at a
-                                satisfactory rate <span>({{$evaluation->progress_unsatisfactory}})</span>
-                            </td>
+                            <td>1. Employee performance and learning is unsatisfactory and is failing to improve at a satisfactory rate</td>
+                            <td>({{$evaluation->progress_unsatisfactory}})</td>
                             <td>{{$evaluation->comments_unsatisfactory}}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">2. Employee performance and learning is acceptable and is improving at a
-                                satisfactory rate <span>({{$evaluation->progress_acceptable}})</span></td>
+                            <td>2. Employee performance and learning is acceptable and is improving at a satisfactory rate</td>
+                            <td>({{$evaluation->progress_acceptable}})</td>
                             <td>{{$evaluation->comments_acceptable}}</td>
                         </tr>
                         <tr>
-                            <td class="span-data">3. Employee has successfully demonstrated outstanding overall performance
-                                <span>({{$evaluation->progress_outstanding}})</span></td>
+                            <td>3. Employee has successfully demonstrated outstanding overall performance</td>
+                            <td>({{$evaluation->progress_outstanding}})</td>
                             <td> {{$evaluation->comments_outstanding}}</td>
                         </tr>
                         <tr>
-                            <td>Total Scoring System <span>{{ $evaluation->total_scoring_system }}</span></td>
-                            {{-- <td></td> --}}
+                            <td>Total Scoring System</td>
+                            <td>{{ $evaluation->total_scoring_system }}</td>
                         </tr>
                         {{-- <tr>
                             <td>FINAL COMMENTS</td>

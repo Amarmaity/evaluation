@@ -39,14 +39,14 @@ class CheckRole
 
         // Define allowed routes for each role
         $roleRoutes = [
-            'admin' => ['admin-dashboard', 'admin-review', 'input-evaluation', 'admin-review-section', 'admin-review-list', 'user-admin-details'],
+            'admin' => ['admin-dashboard', 'admin-review', 'input-evaluation', 'admin-review-section', 'admin-review-list', 'user-admin-details', 'user-report-view-evaluation'],
             'hr' => ['hr-dashboard', 'hr-review', 'input-evaluation', 'hr-review-list', 'user-hr-details', 'user-report-view-evaluation'],
-            'manager' => ['manager-dashboard', 'manager-review', 'input-evaluation', 'manager-review-list', 'user-manager-details'],
-            'users' => ['users-dashboard', 'input-evaluation', 'log-out-users'],
-            'client' => ['client-dashboard', 'client-review', 'client-dashboard'],
+            'manager' => ['manager-dashboard', 'manager-review', 'input-evaluation', 'manager-review-list', 'user-manager-details','manager-review-list', 'user-manager-details', 'user-report-view-evaluation'],
+            'users' => ['users-dashboard', 'input-evaluation', 'log-out-users','get-review-reports'],
+            'client' => ['client-dashboard', 'client-review', 'client-dashboard','user-client-details'],
             'Super User' => ['super-user-dashboard', 'super-user-review', 'add-user', 'userlist', 'super.search',
             'appraisal-view', 'financial.view', 'logout-users', 'user-search', 'super-admin-search', 'super-user-search-bar', 'active-user', 'financial-view', 'super-admin-view',
-            'financial-view-tables', 'employee.details', 'evaluation.details', 'hr.review.details','manager.review.details','admin.review.details','setting-view','create-client', 'client-list']
+            'financial-view-tables', 'employee.details', 'evaluation.details', 'hr.review.details','manager.review.details','admin.review.details','setting-view','create-client', 'client-list','get-probation','financial-view-tables', 'get-pending-apprasil','setting-view', 'edit-user']
         ];
 
         // Get the current route name

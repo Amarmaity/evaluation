@@ -8,7 +8,6 @@ use App\Models\AdminReviewTable;
 use App\Models\AllClient;
 use App\Models\ClientReviewTable;
 use App\Models\evaluationTable;
-use App\Models\FinancialData;
 use App\Models\HrReviewTable;
 use App\Models\ManagerReviewTable;
 use App\Models\SuperAddUser;
@@ -27,104 +26,12 @@ use Illuminate\Support\Facades\Artisan;
 
 class allUserController extends Controller
 {
-    //
-
     public function indexUserLogin()
     {
         $superUser = null;
-        //  $output1 = Artisan::output();
-
+        
         return view("loginusers/userlogin", compact('superUser'));
     }
-
-
-    // public function loginUserAutenticacaon(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'email' => 'required|email',
-    //         'password' => 'required|string|min:4',
-    //         'user_type' => 'required|string',
-    //     ]);
-
-    //     // Check each user type
-    //     $user = SuperAddUser::where('email', $validated['email'])->first();
-    //     if (!$user) {
-    //         $user = SuperUserTable::where('email', $validated['email'])->first();
-    //     }
-    //     if (!$user) {
-    //         $user = AllClient::where('client_email', $validated['email'])->first();
-    //     }
-
-    //     // if($user instanceof SuperUserTable && $user -> status == 0){
-    //     //     return response()->json([
-    //     //         'status' => 'error',
-    //     //         'message' => 'Your account is inactive. Please contact support.'
-    //     //     ]);
-    //     // }
-
-    //     if ($user instanceof AllClient && $user->status == 0) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'Your account is inactive. Please contact support.',
-    //         ]);
-    //     }
-
-    //     if (!$user) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'Invalid email address!',
-    //         ]);
-    //     }
-
-    //     // Normalize email check for AllClient
-    //     $userEmail = $user instanceof AllClient ? $user->client_email : $user->email;
-
-    //     if ($user->user_type !== $validated['user_type']) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'Incorrect user type!',
-    //         ]);
-    //     }
-
-    //     if (!Hash::check($validated['password'], $user->password)) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'Incorrect password!',
-    //         ]);
-    //     }
-
-    //     $otp = random_int(100000, 999999);
-
-    //     Session::put('user_email', $userEmail);
-    //     Session::put('user_type', $user->user_type);
-    //     Session::put('employee_id', $user->employee_id ?? null);
-    //     Session::put('otp', $otp);
-    //     Session::put('otp_email', $userEmail);
-    //     Session::put('otp_sent_time', now());
-
-    //     // If it's a client, store client_id
-    //     if ($user instanceof AllClient) {
-    //         Session::put('client_id', $user->id);
-    //     }
-
-    //     try {
-    //         Mail::to($userEmail)->send(new OtpMail($otp));
-
-    //         return response()->json([
-    //             'status' => 'success',
-    //             'message' => 'OTP has been sent to your email!',
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'Failed to send OTP email. Please try again later.',
-    //             'debug' => env('APP_DEBUG') ? $e->getMessage() : null,
-    //         ]);
-    //     }
-    // }
-
-
-
 
     
 public function loginUserAutenticacaon(Request $request)

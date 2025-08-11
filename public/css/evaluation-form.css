@@ -737,7 +737,7 @@ button.info-button {
 }
 
 .second-label {
-    margin: 40px 15px 40px 0px !important;
+    margin: 40px 15px 40px 0px;
     position: relative;
     font-weight: 500;
     font-size: 16px;
@@ -860,12 +860,9 @@ button.info-button {
 
 .content-block label.main-label {
     display: block;
-    /* padding: 0px; */
+    padding-right: 40px;
     background-color: #FFFFFF;
     cursor: pointer;
-    /* border-radius: 20px;
-    font-weight: bold;
-    margin-bottom: 0px !important; */
     position: relative;
 }
 
@@ -962,23 +959,35 @@ button.info-button {
     font-size: 20px;
     color: #00274D;
 }
+
 .edit-icon {
     border: none !important;
 }
-.edit-icon:hover, .edit-icon:active,.edit-icon:focus {
-    background-color: unset !important;
-    color: unset !important;
-    box-shadow: none !important;
-}
-.edit-icon:active:focus-visible{
-    box-shadow: none !important;
-}
-.modal-dialog .btn-close:hover, .modal-dialog .btn-close:active,.modal-dialog .btn-close:focus{
+
+.edit-icon:hover,
+.edit-icon:active,
+.edit-icon:focus {
     background-color: unset !important;
     color: unset !important;
     box-shadow: none !important;
 }
 
+.edit-icon:active:focus-visible {
+    box-shadow: none !important;
+}
+
+.modal-dialog .btn-close:hover,
+.modal-dialog .btn-close:active,
+.modal-dialog .btn-close:focus {
+    background-color: unset !important;
+    color: unset !important;
+    box-shadow: none !important;
+}
+@media (max-width: 991.98px) {
+  .container {
+    max-width: 900px;
+  }
+}
 @media(min-width: 1400px) {
     #emp_id_input {
         min-width: 600px;
@@ -989,6 +998,13 @@ button.info-button {
 
     .table-wrapper {
         overflow-x: scroll;
+    }
+}
+
+@media(max-width: 1199.98px) {
+    .client___item {
+        flex: 0 1 100%;
+        width: 100%;
     }
 }
 
@@ -1021,10 +1037,121 @@ button.info-button {
     }
 
     h1 {
-        font-size: 24px !important;
+        font-size: 20px !important;
     }
 
     h4 {
         font-size: 18px !important;
     }
+
+    .table th {
+        padding: 8px 10px;
+    }
+
+    .main-table th {
+        padding: 8px 10px !important;
+    }
+
+    .modified-table th {
+        padding: 8px 10px !important;
+    }
+
+
+    .table td {
+        padding: 8px 10px !important;
+    }
+
+    .main-table td {
+        padding: 8px 10px !important;
+    }
+
+    .modified-table td {
+        padding: 8px 10px !important;
+    }
+
+    .client__select {
+        max-width: 100%;
+    }
+
+    .client___item {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .modified-btn {
+        min-width: 135px !important;
+        padding: 12px !important;
+        font-size: 14px !important;
+
+    }
+
+    .modal-footer {
+        justify-content: center !important;
+    }
+
+    .btn-block {
+        margin-top: 8px;
+    }
+
+    .content-block textarea::placeholder,
+    .review-block textarea::placeholder {
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 1.4;
+        letter-spacing: 0;
+        color: #4B4A4A8C;
+    }
+
+    .content .form-select {
+        min-height: 30px;
+    }
+
+    .main-label {
+        font-size: 18px;
+    }
+
+    .second-label {
+        margin: 30px 15px 30px 0px
+    }
+
+    .third-label {
+        margin-top: 15px;
+    }
+
+    .content-block .content .d-flex {
+        flex-wrap: wrap;
+    }
+
+    .radio-button {
+        flex: 0 0 100%;
+    }
+
+    #submitBtn {
+        min-width: 135px;
+        max-width: 135px;
+        max-height: 50px;
+        min-height: 50px;
+        padding: 10px;
+    }
+
+    .btn.btn-primary {
+        min-width: 135px !important;
+        max-width: 135px !important;
+        max-height: 50px;
+        padding: 10px !important;
+        font-size: 14px !important;
+    }
+
+    .form-section1 .form-total {
+        max-width: 75px;
+        min-height: 40px;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .main-label {
+        font-size: 16px;
+    }
+
 }

@@ -59,8 +59,7 @@
         <!-- Buttons for each report -->
         <div class="evaluation-report">
             @if ($userData['evaluation'] !== null)
-                <button class="btn secondary-btn" onclick="loadReport('evaluation', '{{ $emp_id }}')">Evaluation
-                    Details</button>
+                <button class="btn secondary-btn" onclick="loadReport('evaluation', '{{ $emp_id }}')">Evaluation Details</button>
             @endif
 
             @if ($userData['adminReview'] !== null)
@@ -92,11 +91,6 @@
             @elseif(in_array('client', $user_roles))
                 <p>Your client review is pending.</p>
             @endif
-
-
-
-
-
 
         </div>
     </div>

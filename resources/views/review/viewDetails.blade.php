@@ -12,7 +12,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- {{dd($users)}} --}}
-    {{-- <div class="container"> --}}
         <h2 class="heading">Employee Review Details:{{$emp_id}}</h2>
         <div class="mt-3">
             <button onclick="history.back()" class="btn btn-secondary">Back</button>
@@ -67,14 +66,6 @@
                 <p>Evaluation review is pending.</p>
             @endif
 
-            {{-- @if(optional($users['adminReview'])->emp_id)
-            <button class="btn secondary-btn" onclick="loadReport('adminReport', '{{ $users['adminReview']->emp_id }}')">
-                View Admin Review
-            </button>
-            @else
-            <p>Admin review is pending.</p>
-            @endif --}}
-
 
             @php
                 // Check if the current user's emp_id exists as an HR user
@@ -94,13 +85,6 @@
                 @endif
             @endif
 
-            {{-- @if(optional($users['hrReview'])->emp_id)
-            <button class="btn secondary-btn" onclick="loadReport('hrReport', '{{ $users['hrReview']->emp_id }}')">
-                View HR Review
-            </button>
-            @else
-            <p>HR review is pending.</p>
-            @endif --}}
             @php
                 // Check if the current user's emp_id exists as an HR user
                 $isHR = \App\Models\SuperAddUser::where('user_type', 'hr')
@@ -139,17 +123,6 @@
                 @endif
             @endif
 
-            {{-- @if(!isManager)
-            @if(optional($users['managerReview'])->emp_id)
-            <button class="btn secondary-btn"
-                onclick="loadReport('managerReport', '{{ $users['managerReview']->emp_id }}')">
-                View Manager Review
-            </button>
-            @else
-            <p>Manager review is pending.</p>
-            @endif
-            @endif --}}
-
             @if($clientReviews->isNotEmpty())
                 @foreach($clientReviews as $clientReview)
                     <button class="btn secondary-btn"
@@ -161,20 +134,14 @@
                 <p>Your client review is pending.</p>
             @endif
 
-
-
-            {{-- {{dd($clientReview)}} --}}
-
         </div>
 
 
 
 
-        {{-- {{dd($users)}} --}}
+  
         <div id="reportDetails" class="" style=""></div>
-        {{--
-    </div> --}}
-
+  
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- JavaScript for Navigation -->
